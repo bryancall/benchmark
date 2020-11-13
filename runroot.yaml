@@ -1,0 +1,2 @@
+prefix: /opt/ats
+sysconfdir: ./etc/trafficserver
