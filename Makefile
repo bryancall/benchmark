@@ -44,13 +44,13 @@ log_start:
 
 # Step 4 - run the benchmark
 bench_http:
-	h2load --h1 -t 10 -n 3000000 -c 1000 `cat urls.http.config | xargs` | tail -9 > h2load.log
+	h2load --h1 -t 10 -n 3000000 -c 100 `cat urls.http.config | xargs` | tail -9 > h2load.log
 
 bench_https:
-	h2load --h1 -t 10 -n 3000000 -c 1000 `cat urls.https.config | xargs` | tail -9 > h2load.log
+	h2load --h1 -t 10 -n 3000000 -c 100 `cat urls.https.config | xargs` | tail -9 > h2load.log
 
 bench_http2:
-	h2load -t 10 -n 30000000 -c 1000 `cat urls.https.config | xargs` | tail -9 > h2load.log
+	h2load -t 10 -n 30000000 -c 100 `cat urls.https.config | xargs` | tail -9 > h2load.log
 
 # Step 5 - stop loggging performance data
 log_stop:
