@@ -29,28 +29,28 @@ setup:
 
 # Step 2 - prime the cache
 prime_http:
-	curl `cat urls.http.config | xargs`
-	curl `cat urls.http.config | xargs`
+	curl -s -o /dev/null `cat urls.http.config | xargs` >/dev/null
+	curl -s -o /dev/null `cat urls.http.config | xargs` >/dev/null
 
 prime_https:
-	curl -k `cat urls.https.config | xargs`
-	curl -k `cat urls.https.config | xargs`
+	curl -s -o /dev/null -k `cat urls.https.config | xargs` >/dev/null
+	curl -s -o /dev/null -k `cat urls.https.config | xargs`>/dev/null
 
 # Step 3 - start logging performance data
 log_start:
-	dstat 10 >& dstat.log &
+	dstat -Nlo,total 10 >& dstat.log &
 	sudo perf record -a sleep 1200 &
 	sudo perf stat -p `pidof traffic_server` >& perf-stat.log &
 
 # Step 4 - run the benchmark
 bench_http:
-	h2load --h1 -t 10 -n 3000000 -c 100 `cat urls.http.config | xargs` | tail -9 > h2load.log
+	h2load --h1 -t 10 -n 10000000 -c 100 `cat urls.http.config | xargs` | tail -9 > h2load.log
 
 bench_https:
-	h2load --h1 -t 10 -n 3000000 -c 100 `cat urls.https.config | xargs` | tail -9 > h2load.log
+	h2load --h1 -t 10 -n 10000000 -c 100 `cat urls.https.config | xargs` | tail -9 > h2load.log
 
 bench_http2:
-	h2load -t 10 -n 30000000 -c 100 `cat urls.https.config | xargs` | tail -9 > h2load.log
+	h2load -t 10 -n 10000000 -c 100 `cat urls.https.config | xargs` | tail -9 > h2load.log
 
 # Step 5 - stop loggging performance data
 log_stop:
