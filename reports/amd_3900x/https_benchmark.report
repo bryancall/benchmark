@@ -1,0 +1,74 @@
+**http2load**
+finished in 34.73s, 287918.67 req/s, 4.47GB/s
+requests: 10000000 total, 10000000 started, 10000000 done, 10000000 succeeded, 0 failed, 0 errored, 0 timeout
+status codes: 10000000 2xx, 0 3xx, 0 4xx, 0 5xx
+traffic: 155.37GB (166830000000) total, 2.31GB (2480000000) headers (space savings 0.00%), 152.59GB (163840000000) data
+                     min         max         mean         sd        +/- sd
+time for request:       41us     21.84ms       339us       455us    92.24%
+time for connect:     1.84ms     33.66ms     16.97ms     10.13ms    41.00%
+time to 1st byte:     3.12ms     34.03ms     18.16ms     10.15ms    38.00%
+req/s           :    2880.53     3033.84     2954.26       35.51    66.00%
+
+**dstat**
+You did not select any stats, using -cdngy by default.
+----total-usage---- -dsk/total- ---net/lo-- -net/total- ---paging-- ---system--
+usr sys idl wai stl| read  writ| recv  send: recv  send|  in   out | int   csw 
+ 63  33   3   0   0|   0   198k|4779M 4779M: 937B  163B|   0     0 |2457k 1379k
+ 63  34   3   0   0|   0   132k|4778M 4778M:1117B   54k|   0     0 |2473k 1380k
+ 63  33   3   0   0|   0    73M|4775M 4775M: 997B  203B|   0     0 |2493k 1372k
+**perf stat**
+
+ Performance counter stats for process id '2039719':
+
+        534,864.64 msec task-clock                #   15.394 CPUs utilized          
+         1,742,998      context-switches          #    0.003 M/sec                  
+            82,669      cpu-migrations            #    0.155 K/sec                  
+               573      page-faults               #    0.001 K/sec                  
+ 2,188,679,544,438      cycles                    #    4.092 GHz                      (83.29%)
+   283,853,416,216      stalled-cycles-frontend   #   12.97% frontend cycles idle     (83.34%)
+   203,942,469,785      stalled-cycles-backend    #    9.32% backend cycles idle      (83.33%)
+ 1,295,027,846,193      instructions              #    0.59  insn per cycle         
+                                                  #    0.22  stalled cycles per insn  (83.38%)
+   190,779,285,789      branches                  #  356.687 M/sec                    (83.30%)
+     7,044,422,356      branch-misses             #    3.69% of all branches          (83.36%)
+
+      34.744277620 seconds time elapsed
+
+**perf report**
+# Total Lost Samples: 0
+#
+# Samples: 3M of event 'cycles'
+# Event count (approx.): 3154960218632
+#
+#   Overhead  Shared Object         Symbol                                              IPC   [IPC Coverage]
+# ..........  ....................  ..................................................  ....................
+#
+       7.28%  [kernel.kallsyms]     [k] copy_user_generic_string                        -      -            
+       3.82%  libc-2.32.so          [.] __memmove_avx_unaligned_erms                    -      -            
+       3.64%  [kernel.kallsyms]     [k] acpi_processor_ffh_cstate_enter                 -      -            
+       2.64%  [kernel.kallsyms]     [k] __x86_indirect_thunk_rax                        -      -            
+       0.92%  libpthread-2.32.so    [.] __pthread_getspecific                           -      -            
+       0.71%  [kernel.kallsyms]     [k] native_write_msr                                -      -            
+       0.70%  [kernel.kallsyms]     [k] tcp_ack                                         -      -            
+       0.64%  [kernel.kallsyms]     [k] tcp_sendmsg_locked                              -      -            
+       0.55%  [kernel.kallsyms]     [k] __alloc_skb                                     -      -            
+       0.54%  [kernel.kallsyms]     [k] __slab_free                                     -      -            
+       0.54%  libc-2.32.so          [.] _int_malloc                                     -      -            
+       0.53%  libc-2.32.so          [.] _int_free                                       -      -            
+       0.51%  [kernel.kallsyms]     [k] __tcp_transmit_skb                              -      -            
+       0.48%  libcrypto.so.1.1.1h   [.] EVP_CipherInit_ex                               -      -            
+       0.44%  libcrypto.so.1.1.1h   [.] ERR_clear_error                                 -      -            
+       0.43%  libpthread-2.32.so    [.] __pthread_rwlock_rdlock                         -      -            
+       0.42%  [kernel.kallsyms]     [k] tcp_write_xmit                                  -      -            
+       0.41%  traffic_server        [.] SSLNetVConnection::net_read_io                  -      -            
+       0.39%  [kernel.kallsyms]     [k] ep_send_events_proc                             -      -            
+       0.38%  [kernel.kallsyms]     [k] ep_poll_callback                                -      -            
+       0.37%  [kernel.kallsyms]     [k] tcp_recvmsg                                     -      -            
+       0.37%  [kernel.kallsyms]     [k] tcp_v4_rcv                                      -      -            
+       0.37%  [kernel.kallsyms]     [k] selinux_file_permission                         -      -            
+       0.35%  [kernel.kallsyms]     [k] __skb_datagram_iter                             -      -            
+       0.34%  [kernel.kallsyms]     [k] native_read_msr                                 -      -            
+       0.34%  libc-2.32.so          [.] malloc                                          -      -            
+       0.34%  traffic_server        [.] Cache::open_read                                -      -            
+       0.31%  libtscore.so.9.0.0    [.] freelist_new                                    -      -            
+       0.29%  [kernel.kallsyms]     [k] __virt_addr_valid                               -      -            
