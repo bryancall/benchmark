@@ -1,0 +1,58 @@
+**http2load**
+finished in 28.65s, 348985.59 req/s, 5.42GB/s
+requests: 10000000 total, 10000000 started, 10000000 done, 10000000 succeeded, 0 failed, 0 errored, 0 timeout
+status codes: 10000000 2xx, 0 3xx, 0 4xx, 0 5xx
+traffic: 155.37GB (166830000000) total, 2.31GB (2480000000) headers (space savings 0.00%), 152.59GB (163840000000) data
+                     min         max         mean         sd        +/- sd
+time for request:       24us    253.24ms       291us      1.44ms    98.80%
+time for connect:      123us     35.90ms     21.38ms     17.14ms    60.00%
+time to 1st byte:     1.72ms    288.09ms    131.25ms    106.93ms    55.00%
+req/s           :    3489.99     3688.77     3546.71       40.87    73.00%
+
+**dstat**
+You did not select any stats, using -cdngy by default.
+[7l----total-cpu-usage---- -dsk/total- ---net/lo-- -net/total- ---paging-- ---system--
+usr sys idl wai hiq siq| read  writ| recv  send: recv  send|  in   out | int   csw 
+  1   0  98   0   0   0|5738B  533k|   0     0 :   0     0 |   0     0 |  38k   53k
+ 39   7  52   0   0   2|1776k   17M|5440M 5440M:  20M  218k|   0     0 | 637k  656k
+ 48   6  45   0   0   2|   0    14M|4977M 4977M:  21M  224k|   0     0 | 721k  500k
+**perf stat**
+Workload failed: No such file or directory
+**perf report**
+# Total Lost Samples: 0
+#
+# Samples: 7M of event 'cycles'
+# Event count (approx.): 5777912352499
+#
+#   Overhead  Shared Object         Symbol                                            
+# ..........  ....................  ..................................................
+#
+      55.55%  libtscore.so.9.0.0    [.] freelist_new
+       4.36%  [kernel.vmlinux]      [k] copy_user_generic_string
+       2.29%  libtscore.so.9.0.0    [.] freelist_free
+       1.60%  [kernel.vmlinux]      [k] acpi_processor_ffh_cstate_enter
+       1.42%  libc-2.17.so          [.] __memcpy_ssse3
+       1.17%  traffic_server        [.] read_from_net
+       0.72%  libtscore.so.9.0.0    [.] ink_freelist_free
+       0.66%  traffic_server        [.] UnixNetVConnection::load_buffer_and_write
+       0.61%  libtscore.so.9.0.0    [.] ink_freelist_new
+       0.54%  [kernel.vmlinux]      [k] _raw_spin_lock_irqsave
+       0.46%  [kernel.vmlinux]      [k] tcp_sendmsg
+       0.33%  [kernel.vmlinux]      [k] __switch_to
+       0.32%  [kernel.vmlinux]      [k] tcp_ack
+       0.31%  [kernel.vmlinux]      [k] sock_poll
+       0.31%  [kernel.vmlinux]      [k] __check_object_size
+       0.30%  traffic_server        [.] SSLSessionBucket::insertSession
+       0.30%  [kernel.vmlinux]      [k] try_to_wake_up
+       0.28%  traffic_server        [.] RamCacheLRU::get
+       0.28%  traffic_server        [.] Cache::open_read
+       0.28%  [ip_tables]           [k] ipt_do_table
+       0.28%  [kernel.vmlinux]      [k] system_call
+       0.27%  traffic_server        [.] this_ethread
+       0.26%  h2load                [.] llhttp__internal_execute
+       0.24%  [kernel.vmlinux]      [k] tcp_recvmsg
+       0.23%  [kernel.vmlinux]      [k] read_tsc
+       0.23%  [kernel.vmlinux]      [k] ip_finish_output
+       0.23%  [kernel.vmlinux]      [k] fget_light
+       0.21%  [kernel.vmlinux]      [k] __schedule
+       0.21%  [kernel.vmlinux]      [k] tcp_poll

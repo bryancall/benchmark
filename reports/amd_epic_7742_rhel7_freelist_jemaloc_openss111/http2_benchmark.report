@@ -1,0 +1,63 @@
+**http2load**
+finished in 72.49s, 137944.10 req/s, 2.11GB/s
+requests: 10000000 total, 10000000 started, 10000000 done, 10000000 succeeded, 0 failed, 0 errored, 0 timeout
+status codes: 10000000 2xx, 0 3xx, 0 4xx, 0 5xx
+traffic: 152.93GB (164205928710) total, 91.48MB (95925478) headers (space savings 95.99%), 152.59GB (163840000000) data
+                     min         max         mean         sd        +/- sd
+time for request:       62us    233.49ms       706us       706us    95.14%
+time for connect:     9.98ms     37.83ms     26.12ms     12.61ms    60.00%
+time to 1st byte:    11.01ms     67.12ms     32.45ms     14.16ms    61.00%
+req/s           :    1379.46     1484.01     1405.79       21.81    75.00%
+
+**dstat**
+You did not select any stats, using -cdngy by default.
+[7l----total-cpu-usage---- -dsk/total- ---net/lo-- -net/total- ---paging-- ---system--
+usr sys idl wai hiq siq| read  writ| recv  send: recv  send|  in   out | int   csw 
+  1   0  98   0   0   0|5796B  537k|   0     0 :   0     0 |   0     0 |  38k   53k
+ 65   5  29   0   0   1| 918k   19M|2196M 2196M:  19M  201k|   0     0 | 939k  539k
+ 62   5  32   0   0   1|   0    13M|2218M 2218M:  19M  196k|   0     0 | 929k  565k
+ 67   5  27   0   0   1|   0    61M|2196M 2196M:  18M  195k|   0     0 | 972k  528k
+ 67   5  27   0   0   1|   0   104k|2164M 2164M:  18M  195k|   0     0 | 960k  524k
+ 56   5  38   0   0   1|   0    62M|2339M 2339M:  18M  192k|   0     0 | 905k  595k
+ 63   5  31   0   0   1|   0    42M|2238M 2238M:  18M  206k|   0     0 | 947k  555k
+ 65   5  29   0   0   1|   0    13M|2138M 2138M:  18M  201k|   0     0 | 945k  524k
+**perf stat**
+Workload failed: No such file or directory
+**perf report**
+# Total Lost Samples: 0
+#
+# Samples: 28M of event 'cycles'
+# Event count (approx.): 21807873780124
+#
+#   Overhead  Shared Object         Symbol                                            
+# ..........  ....................  ..................................................
+#
+      67.89%  libtscore.so.9.0.0    [.] freelist_new
+       2.46%  libtscore.so.9.0.0    [.] freelist_free
+       1.61%  libc-2.17.so          [.] __memcpy_ssse3
+       1.27%  [kernel.vmlinux]      [k] copy_user_generic_string
+       1.20%  libcrypto.so.1.1      [.] _aesni_ctr32_ghash_6x
+       1.13%  [kernel.vmlinux]      [k] acpi_processor_ffh_cstate_enter
+       0.88%  libtscore.so.9.0.0    [.] ink_freelist_free
+       0.81%  libtscore.so.9.0.0    [.] ink_freelist_new
+       0.39%  [kernel.vmlinux]      [k] native_queued_spin_lock_slowpath
+       0.39%  traffic_server        [.] HpackIndexingTable::lookup
+       0.23%  [kernel.vmlinux]      [k] ktime_get_update_offsets_now
+       0.23%  libpthread-2.17.so    [.] pthread_mutex_lock
+       0.22%  [kernel.vmlinux]      [k] _raw_spin_lock_irqsave
+       0.21%  [kernel.vmlinux]      [k] ktime_get
+       0.19%  traffic_server        [.] SSLSessionBucket::insertSession
+       0.18%  [kernel.vmlinux]      [k] __switch_to
+       0.17%  [kernel.vmlinux]      [k] tcp_ack
+       0.16%  [kernel.vmlinux]      [k] rb_prev
+       0.16%  [kernel.vmlinux]      [k] try_to_wake_up
+       0.15%  [kernel.vmlinux]      [k] system_call
+       0.14%  traffic_server        [.] MIMEField::name_get
+       0.14%  [ip_tables]           [k] ipt_do_table
+       0.13%  [kernel.vmlinux]      [k] __schedule
+       0.13%  [kernel.vmlinux]      [k] update_cfs_shares
+       0.13%  [kernel.vmlinux]      [k] tcp_sendmsg
+       0.13%  traffic_server        [.] hdrtoken_tokenize
+       0.12%  [kernel.vmlinux]      [k] sched_ttwu_pending
+       0.12%  [kernel.vmlinux]      [k] amd_pmu_addr_offset
+       0.12%  libpthread-2.17.so    [.] pthread_getspecific
