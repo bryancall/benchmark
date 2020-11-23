@@ -1,0 +1,171 @@
+**http2load**
+finished in 53.15s, 188131.65 req/s, 2.92GB/s
+requests: 10000000 total, 10000000 started, 10000000 done, 10000000 succeeded, 0 failed, 0 errored, 0 timeout
+status codes: 10000000 2xx, 0 3xx, 0 4xx, 0 5xx
+traffic: 155.37GB (166830000000) total, 2.31GB (2480000000) headers (space savings 0.00%), 152.59GB (163840000000) data
+                     min         max         mean         sd        +/- sd
+time for request:       57us    163.14ms      1.04ms       806us    98.10%
+time for connect:    26.10ms    100.05ms     50.32ms     20.69ms    63.50%
+time to 1st byte:    30.44ms    110.51ms     59.51ms     21.33ms    66.50%
+req/s           :     896.32     1125.81      967.72       82.09    71.50%
+
+**dstat**
+You did not select any stats, using -cdngy by default.
+[7l----total-cpu-usage---- -dsk/total- ---net/lo-- -net/total- ---paging-- ---system--
+usr sys idl wai hiq siq| read  writ| recv  send: recv  send|  in   out | int   csw 
+  1   0  99   0   0   0|5473B  497k|   0     0 :   0     0 |   0     0 |  37k   52k
+ 10  22  66   0   0   1| 196k   19M|3125M 3125M:  19M  253k|   0     0 | 709k 1126k
+ 11  22  66   0   0   1|   0    20M|3150M 3150M:  19M  244k|   0     0 | 730k 1143k
+ 10  22  66   0   0   1|   0    35M|2980M 2980M:  19M  243k|   0     0 | 720k 1092k
+ 10  22  66   0   0   1|   0    48M|3015M 3015M:  19M  241k|   0     0 | 731k 1097k
+ 10  22  66   0   0   1|   0    28M|3101M 3101M:  19M  244k|   0     0 | 736k 1134k
+**perf stat**
+Workload failed: No such file or directory
+**perf report**
+# Total Lost Samples: 0
+#
+# Samples: 14M of event 'cycles'
+# Event count (approx.): 7952857390223
+#
+#   Overhead  Shared Object         Symbol                                            
+# ..........  ....................  ..................................................
+#
+      40.23%  [kernel.vmlinux]      [k] native_queued_spin_lock_slowpath
+       3.70%  [kernel.vmlinux]      [k] copy_user_generic_string
+       2.20%  [kernel.vmlinux]      [k] acpi_processor_ffh_cstate_enter
+       2.03%  libcrypto.so.1.1      [.] _aesni_ctr32_ghash_6x
+       1.13%  libc-2.17.so          [.] __memcpy_ssse3
+       1.02%  libpthread-2.17.so    [.] pthread_mutex_lock
+       0.83%  [kernel.vmlinux]      [k] futex_wait_setup
+       0.73%  [kernel.vmlinux]      [k] __switch_to
+       0.73%  [kernel.vmlinux]      [k] futex_wake
+       0.70%  [kernel.vmlinux]      [k] try_to_wake_up
+       0.68%  libtscore.so.9.0.0    [.] malloc_new
+       0.64%  libpthread-2.17.so    [.] pthread_mutex_unlock
+       0.56%  [kernel.vmlinux]      [k] _raw_spin_lock_irqsave
+       0.51%  [kernel.vmlinux]      [k] __schedule
+       0.50%  [kernel.vmlinux]      [k] system_call
+       0.49%  [kernel.vmlinux]      [k] __audit_syscall_exit
+       0.48%  libc-2.17.so          [.] _int_malloc
+       0.47%  libtscore.so.9.0.0    [.] malloc_free
+       0.42%  [kernel.vmlinux]      [k] update_cfs_shares
+       0.41%  [kernel.vmlinux]      [k] tcp_ack
+       0.37%  [kernel.vmlinux]      [k] rb_prev
+       0.37%  traffic_server        [.] SSLSessionBucket::insertSession
+       0.35%  [ip_tables]           [k] ipt_do_table
+       0.35%  libpthread-2.17.so    [.] __lll_lock_wait
+       0.33%  [kernel.vmlinux]      [k] read_tsc
+       0.32%  [kernel.vmlinux]      [k] tcp_sendmsg
+       0.31%  [kernel.vmlinux]      [k] _raw_spin_lock
+       0.29%  [kernel.vmlinux]      [k] __check_object_size
+       0.27%  [kernel.vmlinux]      [k] fget_light
+       0.27%  [kernel.vmlinux]      [k] source_load
+       0.27%  [kernel.vmlinux]      [k] sched_ttwu_pending
+       0.25%  [kernel.vmlinux]      [k] tcp_recvmsg
+       0.24%  [kernel.vmlinux]      [k] sock_poll
+       0.24%  libc-2.17.so          [.] _int_free
+       0.24%  [kernel.vmlinux]      [k] ktime_get
+       0.24%  [kernel.vmlinux]      [k] ip_finish_output
+       0.24%  [kernel.vmlinux]      [k] enqueue_entity
+       0.23%  [kernel.vmlinux]      [k] menu_select
+       0.23%  [kernel.vmlinux]      [k] native_write_msr_safe
+       0.22%  [kernel.vmlinux]      [k] __slab_free
+       0.21%  [kernel.vmlinux]      [k] __inet_lookup_established
+       0.21%  [kernel.vmlinux]      [k] int_sqrt
+       0.21%  [kernel.vmlinux]      [k] tcp_transmit_skb
+       0.21%  [kernel.vmlinux]      [k] __alloc_skb
+       0.21%  libtscore.so.9.0.0    [.] ink_freelist_new
+       0.20%  [kernel.vmlinux]      [k] tcp_poll
+       0.20%  libssl.so.1.0.2k      [.] 0x000000000002cb7c
+       0.20%  traffic_server        [.] SSLNetVConnection::net_read_io
+       0.20%  [kernel.vmlinux]      [k] __local_bh_enable_ip
+       0.19%  traffic_server        [.] RamCacheLRU::get
+       0.18%  [kernel.vmlinux]      [k] cpu_startup_entry
+       0.18%  [kernel.vmlinux]      [k] finish_task_switch
+       0.18%  [kernel.vmlinux]      [k] __dev_queue_xmit
+       0.18%  [kernel.vmlinux]      [k] quiet_vmstat
+       0.17%  traffic_server        [.] Cache::open_read
+       0.17%  [kernel.vmlinux]      [k] _raw_spin_lock_bh
+       0.17%  [kernel.vmlinux]      [k] effective_load.isra.38
+       0.16%  [kernel.vmlinux]      [k] ipv4_dst_check
+       0.16%  [kernel.vmlinux]      [k] sysret_check
+       0.16%  [kernel.vmlinux]      [k] __virt_addr_valid
+       0.16%  [kernel.vmlinux]      [k] tcp_write_xmit
+       0.16%  libcrypto.so.1.0.2k   [.] 0x00000000001263a9
+       0.16%  libssl.so.1.1         [.] do_ssl3_write.localalias.3
+       0.16%  [kernel.vmlinux]      [k] __list_add
+       0.16%  [kernel.vmlinux]      [k] wake_up_q
+       0.15%  libcrypto.so.1.0.2k   [.] ERR_get_state
+       0.15%  libc-2.17.so          [.] malloc
+       0.15%  [kernel.vmlinux]      [k] pick_next_task_fair
+       0.15%  [kernel.vmlinux]      [k] tcp_v4_rcv
+       0.15%  libpthread-2.17.so    [.] pthread_getspecific
+       0.15%  [kernel.vmlinux]      [k] amd_pmu_addr_offset
+       0.15%  traffic_server        [.] this_ethread
+       0.15%  [kernel.vmlinux]      [k] idle_cpu
+       0.14%  [kernel.vmlinux]      [k] ipv4_mtu
+       0.14%  libc-2.17.so          [.] malloc_consolidate
+       0.14%  libtscore.so.9.0.0    [.] ink_freelist_free
+       0.14%  [kernel.vmlinux]      [k] select_task_rq_fair
+       0.14%  [kernel.vmlinux]      [k] tcp_rcv_established
+       0.13%  [kernel.vmlinux]      [k] __list_del_entry
+       0.13%  [kernel.vmlinux]      [k] ktime_get_update_offsets_now
+       0.13%  [kernel.vmlinux]      [k] enqueue_task_fair
+       0.13%  [kernel.vmlinux]      [k] mark_wake_futex
+       0.13%  [kernel.vmlinux]      [k] activate_task
+       0.13%  [kernel.vmlinux]      [k] ep_send_events_proc
+       0.13%  [kernel.vmlinux]      [k] ksize
+       0.12%  traffic_server        [.] NetHandler::waitForActivity
+       0.12%  traffic_server        [.] HttpTransact::HandleRequest
+       0.12%  [kernel.vmlinux]      [k] kfree
+       0.11%  traffic_server        [.] mime_hdr_field_find
+       0.11%  libcrypto.so.1.0.2k   [.] 0x00000000001292e6
+       0.11%  traffic_server        [.] HttpSM::init
+       0.11%  [kernel.vmlinux]      [k] tcp_check_space
+       0.11%  [kernel.vmlinux]      [k] update_curr
+       0.11%  [kernel.vmlinux]      [k] __unqueue_futex
+       0.11%  [kernel.vmlinux]      [k] __audit_syscall_entry
+       0.11%  [kernel.vmlinux]      [k] find_vma
+       0.11%  traffic_server        [.] ConfigProcessor::release
+       0.11%  traffic_server        [.] HttpTransact::update_size_and_time_stats
+       0.11%  [kernel.vmlinux]      [k] tcp_cleanup_rbuf
+       0.11%  traffic_server        [.] ConfigProcessor::get
+       0.11%  [kernel.vmlinux]      [k] __netif_receive_skb_core
+       0.10%  [kernel.vmlinux]      [k] nf_iterate
+       0.10%  traffic_server        [.] LogObject::_checkout_write
+       0.10%  traffic_server        [.] HttpSM::state_api_callout
+       0.10%  traffic_server        [.] HttpSM::set_next_state
+       0.10%  [kernel.vmlinux]      [k] dst_release
+       0.10%  [iptable_mangle]      [k] iptable_mangle_hook
+       0.10%  libssl.so.1.1         [.] tls1_enc
+       0.10%  [kernel.vmlinux]      [k] net_rx_action
+       0.09%  [kernel.vmlinux]      [k] __ip_local_out_sk
+       0.09%  [kernel.vmlinux]      [k] plist_add
+       0.09%  libssl.so.1.0.2k      [.] 0x000000000002ca3b
+       0.09%  libssl.so.1.0.2k      [.] 0x000000000002cb1e
+       0.09%  [kernel.vmlinux]      [k] tcp_release_cb
+       0.09%  traffic_server        [.] CacheVC::openReadStartHead
+       0.09%  [kernel.vmlinux]      [k] native_sched_clock
+       0.09%  [kernel.vmlinux]      [k] cpuacct_charge
+       0.09%  [xt_dscp]             [k] dscp_mt
+       0.09%  [vdso]                [.] __vdso_clock_gettime
+       0.09%  libcrypto.so.1.1      [.] ASN1_item_ex_i2d
+       0.09%  [kernel.vmlinux]      [k] __wake_up_common
+       0.09%  traffic_server        [.] SSLNetVConnection::load_buffer_and_write
+       0.08%  [kernel.vmlinux]      [k] futex_wait
+       0.08%  traffic_server        [.] LogBuffer::checkout_write
+       0.08%  traffic_server        [.] HttpSM::setup_cache_read_transfer
+       0.08%  [kernel.vmlinux]      [k] dequeue_entity
+       0.08%  [kernel.vmlinux]      [k] tcp_stream_memory_free
+       0.08%  [kernel.vmlinux]      [k] mod_timer
+       0.08%  [kernel.vmlinux]      [k] __skb_clone
+       0.08%  [kernel.vmlinux]      [k] tcp_send_ack
+       0.08%  [kernel.vmlinux]      [k] __do_softirq
+       0.08%  traffic_server        [.] HttpSM::attach_client_session
+       0.08%  [kernel.vmlinux]      [k] skb_release_data
+       0.08%  traffic_server        [.] dir_probe
+       0.08%  libpthread-2.17.so    [.] __errno_location
+       0.08%  traffic_server        [.] UnixNetVConnection::netActivity
+       0.08%  traffic_server        [.] HttpSM::state_read_client_request_header
+       0.08%  [kernel.vmlinux]      [k] find_busiest_group
+       0.08%  [kernel.vmlinux]      [k] unroll_tree_refs

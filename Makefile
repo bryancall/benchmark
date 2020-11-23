@@ -15,6 +15,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+TS_RUNROOT:=`pwd`
+PATH:=$(PATH):/opt/h2load/bin
+
 test:
 	$(MAKE) http
 	$(MAKE) https
@@ -44,21 +47,22 @@ log_start:
 
 # Step 4 - run the benchmark
 bench_http:
-	h2load --h1 -t 10 -n 10000000 -c 100 `cat urls.http.config | xargs` | tail -9 > h2load.log
+	h2load --h1 -t 30 -n 20000000 -c 200 `cat urls.http.config | xargs` | tail -9 > h2load.log
 
 bench_https:
-	h2load --h1 -t 10 -n 10000000 -c 100 `cat urls.https.config | xargs` | tail -9 > h2load.log
+	h2load --h1 -t 30 -n 20000000 -c 200 `cat urls.https.config | xargs` | tail -9 > h2load.log
 
 bench_http2:
-	h2load -t 10 -n 10000000 -c 100 `cat urls.https.config | xargs` | tail -9 > h2load.log
+	h2load -t 30 -n 20000000 -c 200 `cat urls.https.config | xargs` | tail -9 > h2load.log
 
 # Step 5 - stop loggging performance data
 log_stop:
 	kill `ps axuw | grep dsta[t] | awk '{print $$2}'`
 	sudo killall -s SIGINT perf
 	sudo killall -s SIGINT perf || echo "it's ok"
-	sleep 5
-	sudo perf report -sdso,symbol --stdio  -w10,20,50,20 | head -40 | tail -37 > perf-report.log
+	while [ `ps axuw | grep perf | grep -v grep | wc -l` != '0' ]; do echo "perf still running"; sleep 1; done
+	sleep 1
+	sudo perf report -sdso,symbol --stdio  -w10,20,50 | head -150 | tail -147 > perf-report.log
 
 # Step 6 - make a report
 report:
