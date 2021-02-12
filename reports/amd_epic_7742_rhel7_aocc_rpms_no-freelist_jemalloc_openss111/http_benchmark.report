@@ -1,0 +1,193 @@
+**http2load**
+finished in 119.78s, 4174.38 req/s, 66.52MB/s
+requests: 500000 total, 500000 started, 500000 done, 500000 succeeded, 0 failed, 0 errored, 0 timeout
+status codes: 500000 2xx, 0 3xx, 0 4xx, 0 5xx
+traffic: 7.78GB (8355000000) total, 129.22MB (135500000) headers (space savings 0.00%), 7.63GB (8192000000) data
+                     min         max         mean         sd        +/- sd
+time for request:      179us       1.49s     47.73ms     84.40ms    85.55%
+time for connect:      483us     48.66ms     19.61ms     19.25ms    70.00%
+time to 1st byte:     8.94ms    508.08ms    131.06ms    129.00ms    83.00%
+req/s           :      19.92       23.27       20.95        1.50    70.00%
+
+**dstat**
+You did not select any stats, using -cdngy by default.
+[7l----total-cpu-usage---- -dsk/total- ---net/lo-- -net/total- ---paging-- ---system--
+usr sys idl wai hiq siq| read  writ| recv  send: recv  send|  in   out | int   csw 
+  1   0  99   0   0   0|2007B  254k|   0     0 :   0     0 |   0     0 |  22k   54k
+ 77   0  23   0   0   0|   0  8869k|  28M   28M: 260k   43k|   0     0 | 902k   46k
+ 83   0  17   0   0   0|   0   174k|  26M   26M: 108k   28k|   0     0 | 988k   38k
+ 82   0  18   0   0   0|   0    48M|  21M   21M:  76k   28k|   0     0 | 975k   37k
+ 83   0  17   0   0   0|   0   115k|  23M   23M: 151k   27k|   0     0 | 982k   39k
+ 83   0  17   0   0   0|   0  6928k|  22M   22M:  56k   39k|   0     0 | 983k   38k
+ 81   0  18   0   0   0|   0    51M|  23M   23M: 169k   31k|   0     0 | 981k   60k
+ 83   0  17   0   0   0|   0   381k|  29M   29M: 131k   83k|   0     0 | 993k   69k
+ 84   0  16   0   0   0|   0  1350k|  23M   23M:  56k   43k|   0     0 |1005k   60k
+ 82   0  17   0   0   0| 410B   58M|  21M   21M: 170k   38k|   0     0 | 994k   61k
+ 82   0  17   0   0   0|   0   163k|  21M   21M: 111k   30k|   0     0 | 990k   61k
+ 83   0  17   0   0   0|   0    22M|  22M   22M:  77k   51k|   0     0 |1000k   63k
+**perf stat**
+
+ Performance counter stats for process id '9630':
+
+     12,292,636.24 msec task-clock                #  102.581 CPUs utilized          
+         1,110,881      context-switches          #    0.090 K/sec                  
+           141,773      cpu-migrations            #    0.012 K/sec                  
+           231,075      page-faults               #    0.019 K/sec                  
+41,368,157,136,694      cycles                    #    3.365 GHz                      (66.73%)
+   184,411,390,115      stalled-cycles-frontend   #    0.45% frontend cycles idle     (66.73%)
+   106,489,102,859      stalled-cycles-backend    #    0.26% backend cycles idle      (66.73%)
+   823,381,358,451      instructions              #    0.02  insn per cycle         
+                                                  #    0.22  stalled cycles per insn  (66.73%)
+   164,559,850,812      branches                  #   13.387 M/sec                    (66.73%)
+     5,977,532,496      branch-misses             #    3.63% of all branches          (66.73%)
+
+     119.833859245 seconds time elapsed
+
+**perf report**
+# Total Lost Samples: 0
+#
+# Samples: 50M of event 'cycles'
+# Event count (approx.): 41805551520295
+#
+#   Overhead  Shared Object         Symbol                                            
+# ..........  ....................  ..................................................
+#
+      95.22%  traffic_server        [.] LogObject::_checkout_write
+       0.17%  libdh_rainbow_eventf  [.] ZSTD_compressBlock_doubleFast
+       0.14%  [kernel.vmlinux]      [k] native_queued_spin_lock_slowpath
+       0.14%  [kernel.vmlinux]      [k] task_tick_fair
+       0.14%  [kernel.vmlinux]      [k] native_write_msr_safe
+       0.13%  [kernel.vmlinux]      [k] rb_prev
+       0.13%  traffic_server        [.] LogBuffer::checkout_write
+       0.11%  [kernel.vmlinux]      [k] update_cfs_rq_blocked_load
+       0.11%  [kernel.vmlinux]      [k] acpi_processor_ffh_cstate_enter
+       0.11%  traffic_server        [.] UrlRewrite::_regexMappingLookup
+       0.11%  [kernel.vmlinux]      [k] delay_tsc
+       0.10%  [kernel.vmlinux]      [k] native_read_msr_safe
+       0.10%  [kernel.vmlinux]      [k] ktime_get_update_offsets_now
+       0.06%  [kernel.vmlinux]      [k] update_cfs_shares
+       0.06%  traffic_server        [.] TSHttpTxnReenable
+       0.06%  [kernel.vmlinux]      [k] source_load
+       0.05%  traffic_server        [.] HttpHookState::getNext
+       0.04%  [kernel.vmlinux]      [k] copy_user_generic_string
+       0.04%  [kernel.vmlinux]      [k] apic_timer_interrupt
+       0.04%  traffic_server        [.] HttpSM::state_api_callout
+       0.04%  [kernel.vmlinux]      [k] amd_pmu_addr_offset
+       0.03%  [kernel.vmlinux]      [k] ktime_get
+       0.03%  [kernel.vmlinux]      [k] __do_softirq
+       0.03%  [kernel.vmlinux]      [k] _raw_spin_lock
+       0.03%  [kernel.vmlinux]      [k] idle_cpu
+       0.03%  libdh_rainbow_eventf  [.] 0x0000000000081bf7
+       0.03%  libc-2.17.so          [.] _int_malloc
+       0.02%  libdh_rainbow_eventf  [.] 0x00000000000822d2
+       0.02%  libpcre.so.1.2.0      [.] pcre_exec
+       0.02%  libdh_rainbow_eventf  [.] 0x0000000000081bf4
+       0.02%  libc-2.17.so          [.] __memcpy_ssse3
+       0.02%  [kernel.vmlinux]      [k] __schedule
+       0.02%  traffic_server        [.] WeakMutexTryLock::WeakMutexTryLock
+       0.02%  [kernel.vmlinux]      [k] msecs_to_jiffies
+       0.02%  [kernel.vmlinux]      [k] hrtimer_active
+       0.02%  [kernel.vmlinux]      [k] find_busiest_group
+       0.02%  libtscore.so.9.0.0    [.] malloc_new
+       0.02%  libdh_rainbow_eventf  [.] 0x0000000000081bc2
+       0.02%  [kernel.vmlinux]      [k] update_curr
+       0.02%  traffic_server        [.] MutexTryLock::MutexTryLock
+       0.02%  libtscore.so.9.0.0    [.] ink_freelist_free
+       0.02%  libtscore.so.9.0.0    [.] malloc_free
+       0.02%  perf                  [.] perf_mmap__push
+       0.02%  [kernel.vmlinux]      [k] _raw_spin_lock_irqsave
+       0.02%  libdh_rainbow_eventf  [.] 0x0000000000081bc6
+       0.01%  libperl.so            [.] Perl_hv_common
+       0.01%  traffic_server        [.] this_ethread
+       0.01%  [unknown]             [.] 0x00002b1fca57343a
+       0.01%  [kernel.vmlinux]      [k] read_tsc
+       0.01%  [kernel.vmlinux]      [k] acpi_idle_do_entry
+       0.01%  libdh_rainbow_eventf  [.] 0x0000000000082153
+       0.01%  [unknown]             [.] 0x00002b1fca57062e
+       0.01%  [kernel.vmlinux]      [k] __switch_to
+       0.01%  libtscore.so.9.0.0    [.] ink_freelist_new
+       0.01%  libc-2.17.so          [.] __memset_sse2
+       0.01%  libc-2.17.so          [.] _int_free
+       0.01%  [kernel.vmlinux]      [k] try_to_wake_up
+       0.01%  [kernel.vmlinux]      [k] rcu_check_callbacks
+       0.01%  libperl.so            [.] Perl_pp_padsv
+       0.01%  libc-2.17.so          [.] __strncmp_sse42
+       0.01%  libc-2.17.so          [.] vfprintf
+       0.01%  traffic_server        [.] HttpTransact::update_size_and_time_stats
+       0.01%  traffic_server        [.] TSMutexLock
+       0.01%  [kernel.vmlinux]      [k] system_call
+       0.01%  libdh_rainbow_eventf  [.] 0x0000000000081c08
+       0.01%  libpcre.so.1.2.0      [.] 0x0000000000044783
+       0.01%  libdh_rainbow_eventf  [.] 0x00000000000749e9
+       0.01%  libc-2.17.so          [.] malloc
+       0.01%  libc-2.17.so          [.] __strlen_sse42
+       0.01%  [kernel.vmlinux]      [k] x86_pmu_disable_all
+       0.01%  libdh_rainbow_eventf  [.] 0x0000000000081be6
+       0.01%  [kernel.vmlinux]      [k] __d_lookup_rcu
+       0.01%  libdh_rainbow_eventf  [.] 0x000000000008227e
+       0.01%  [kernel.vmlinux]      [k] iov_iter_fault_in_readable
+       0.01%  traffic_server        [.] TSMutexUnlock
+       0.01%  traffic_server        [.] mime_hdr_field_find
+       0.01%  [kernel.vmlinux]      [k] rcu_note_context_switch
+       0.01%  libdh_rainbow_eventf  [.] 0x00000000000822a6
+       0.01%  [kernel.vmlinux]      [k] osq_lock
+       0.01%  [kernel.vmlinux]      [k] sched_ttwu_pending
+       0.01%  [kernel.vmlinux]      [k] account_user_time
+       0.01%  [kernel.vmlinux]      [k] __smp_mb__after_atomic
+       0.01%  [kernel.vmlinux]      [k] _raw_spin_lock_irq
+       0.01%  libc-2.17.so          [.] malloc_consolidate
+       0.01%  libperl.so            [.] Perl_pp_const
+       0.01%  libdh_rainbow_eventf  [.] 0x000000000008218d
+       0.01%  libdh_rainbow_eventf  [.] 0x000000000008234b
+       0.01%  traffic_server        [.] TSStatIntIncrement
+       0.01%  libdh_rainbow_eventf  [.] 0x0000000000082303
+       0.01%  libdh_rainbow_eventf  [.] 0x00000000000749d7
+       0.01%  traffic_server        [.] UnixNetVConnection::set_inactivity_timeout
+       0.01%  libperl.so            [.] Perl_pp_rv2av
+       0.01%  [kernel.vmlinux]      [k] scheduler_tick
+       0.01%  traffic_server        [.] APIHook::invoke
+       0.01%  libdh_rainbow_eventf  [.] 0x0000000000081c27
+       0.01%  libdh_rainbow_eventf  [.] 0x0000000000071b37
+       0.01%  traffic_server        [.] HttpSM::state_api_callback
+       0.01%  [unknown]             [.] 0x00002b1fca575b90
+       0.01%  [unknown]             [.] 0x00002b1fca575b5a
+       0.01%  [unknown]             [.] 0x00002b1fca570621
+       0.01%  libdh_rainbow_eventf  [.] 0x0000000000082170
+       0.01%  [kernel.vmlinux]      [k] run_timer_softirq
+       0.01%  [unknown]             [.] 0x00002b1fca570624
+       0.01%  [kernel.vmlinux]      [k] fget_light
+       0.01%  [kernel.vmlinux]      [k] update_blocked_averages
+       0.01%  libperl.so            [.] Perl_sv_setsv_flags
+       0.01%  traffic_server        [.] UnixNetVConnection::reenable
+       0.01%  libdh_rainbow_eventf  [.] 0x0000000000082289
+       0.01%  libdh_rainbow_eventf  [.] 0x0000000000074d13
+       0.01%  libc-2.17.so          [.] free
+       0.01%  [ip_tables]           [k] ipt_do_table
+       0.01%  [kernel.vmlinux]      [k] load_balance
+       0.01%  libpthread-2.17.so    [.] pthread_getspecific
+       0.01%  traffic_server        [.] LogFieldList::marshal_len
+       0.00%  traffic_server        [.] HttpSM::state_read_client_request_header
+       0.00%  [unknown]             [.] 0x00002b1fca576a13
+       0.00%  [kernel.vmlinux]      [k] alloc_iova
+       0.00%  [kernel.vmlinux]      [k] __audit_syscall_exit
+       0.00%  libc-2.17.so          [.] __memmove_ssse3
+       0.00%  libperl.so            [.] Perl_pp_helem
+       0.00%  libdh_rainbow_eventf  [.] 0x0000000000082175
+       0.00%  libperl.so            [.] Perl_leave_scope
+       0.00%  [kernel.vmlinux]      [k] menu_select
+       0.00%  libdh_rainbow_eventf  [.] ZSTD_seqToCodes
+       0.00%  [kernel.vmlinux]      [k] find_vma
+       0.00%  [kernel.vmlinux]      [k] _extract_crng
+       0.00%  [unknown]             [.] 0x00002b1fca5709c9
+       0.00%  traffic_server        [.] HttpSM::init
+       0.00%  [kernel.vmlinux]      [k] enqueue_entity
+       0.00%  libdh_rainbow_eventf  [.] 0x00000000000822c5
+       0.00%  libperl.so            [.] Perl_pp_nextstate
+       0.00%  [kernel.vmlinux]      [k] cpuacct_charge
+       0.00%  [kernel.vmlinux]      [k] int_sqrt
+       0.00%  [kernel.vmlinux]      [k] lock_hrtimer_base.isra.20
+       0.00%  traffic_server        [.] net_activity
+       0.00%  libpthread-2.17.so    [.] pthread_mutex_lock
+       0.00%  [kernel.vmlinux]      [k] ip_finish_output
+       0.00%  [kernel.vmlinux]      [k] default_send_IPI_mask_sequence_phys
+       0.00%  libdh_rainbow_eventf  [.] 0x000000000008233c
