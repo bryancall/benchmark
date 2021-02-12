@@ -15,8 +15,11 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-TS_RUNROOT:=`pwd`
+TS_RUNROOT:=$(shell pwd)
 PATH:=$(PATH):/opt/h2load/bin
+YSECURE_UNSAFE_LOCK_CALLBACKS=2
+#ATS_DIR=/opt/ats
+ATS_DIR=/opt/amd/trafficserver/9.0/
 
 test:
 	$(MAKE) http
@@ -25,9 +28,11 @@ test:
 
 # Step 1 - setup the test
 setup:
-	sudo /opt/ats/bin/trafficserver stop
-	sudo rm -f /opt/ats/var/log/trafficserver/squid.blog*
-	sudo /opt/ats/bin/trafficserver start
+	#sudo $(ATS_DIR)/bin/trafficserver stop
+	sudo systemctl stop trafficserver9
+	sudo rm -f $(ATS_DIR)/var/log/trafficserver/squid.blog*
+	sudo systemctl start trafficserver9
+	#sudo $(ATS_DIR)/bin/trafficserver start
 	rm -f *.log perf.data*
 
 # Step 2 - prime the cache
@@ -47,13 +52,13 @@ log_start:
 
 # Step 4 - run the benchmark
 bench_http:
-	h2load --h1 -t 30 -n 20000000 -c 200 `cat urls.http.config | xargs` | tail -9 > h2load.log
+	h2load --h1 -t 30 -n 500000 -c 200 `cat urls.http.config | xargs` | tail -9 > h2load.log
 
 bench_https:
-	h2load --h1 -t 30 -n 20000000 -c 200 `cat urls.https.config | xargs` | tail -9 > h2load.log
+	h2load --h1 -t 30 -n 500000 -c 200 `cat urls.https.config | xargs` | tail -9 > h2load.log
 
 bench_http2:
-	h2load -t 30 -n 20000000 -c 200 `cat urls.https.config | xargs` | tail -9 > h2load.log
+	h2load -t 30 -n 500000 -c 200 `cat urls.https.config | xargs` | tail -9 > h2load.log
 
 # Step 5 - stop loggging performance data
 log_stop:
@@ -62,7 +67,7 @@ log_stop:
 	sudo killall -s SIGINT perf || echo "it's ok"
 	while [ `ps axuw | grep perf | grep -v grep | wc -l` != '0' ]; do echo "perf still running"; sleep 1; done
 	sleep 1
-	sudo perf report -sdso,symbol --stdio  -w10,20,50 | head -150 | tail -147 > perf-report.log
+	sudo perf report -sdso,symbol --stdio  -w10,20,50 | grep -v h2load | grep -v swapper | head -150 | tail -147 > perf-report.log
 
 # Step 6 - make a report
 report:
