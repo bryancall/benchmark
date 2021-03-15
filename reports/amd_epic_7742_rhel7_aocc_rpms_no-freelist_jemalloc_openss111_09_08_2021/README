@@ -1,0 +1,2 @@
+Changed this configuation setting:
+CONFIG proxy.config.log.log_buffer_size INT 212992
