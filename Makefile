@@ -52,10 +52,10 @@ log_start:
 
 # Step 4 - run the benchmark
 bench_http:
-	h2load --h1 -t 30 -n 500000 -c 200 `cat urls.http.config | xargs` | tail -9 > h2load.log
+	h2load --h1 -t 30 -n 1000000 -c 200 `cat urls.http.config | xargs` | tail -9 > h2load.log
 
 bench_https:
-	h2load --h1 -t 30 -n 500000 -c 200 `cat urls.https.config | xargs` | tail -9 > h2load.log
+	h2load --h1 -t 30 -n 1000000 -c 200 `cat urls.https.config | xargs` | tail -9 > h2load.log
 
 bench_http2:
 	h2load -t 30 -n 1000000 -c 200 `cat urls.https.config | xargs` | tail -9 > h2load.log
