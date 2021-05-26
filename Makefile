@@ -83,5 +83,9 @@ install:
 	sudo cp -rp h2load /opt/
 	sudo yum install -y libev c-ares
 
+update_url_files:
+	sed -i "s/127.0.0.1/$(CLIENT_IP)" urls.http.config
+	sed -i "s/127.0.0.1/$(CLIENT_IP)" urls.https.config
+
 clean:
 	rm -f *.log perf.data* *report
