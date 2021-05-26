@@ -90,5 +90,9 @@ https: setup prime_https log_start bench_https log_stop report
 http2: setup prime_https log_start bench_http2 log_stop report
 	mv report http2_benchmark.report
 
+install:
+	sudo cp -rp h2load /opt/
+	sudo yum install -y libev c-ares
+
 clean:
 	rm -f *.log perf.data* *report
