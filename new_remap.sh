@@ -16,4 +16,5 @@ tail -$tail_lines /tmp/new_remap.config >> /tmp/new_generator_remap.config
 
 rm /tmp/new_remap.config
 
+sudo mv /home/y/conf/trafficserver/remap.config /home/y/conf/trafficserver/remap.config.orig
 sudo mv /tmp/new_generator_remap.config /home/y/conf/trafficserver/remap.config
