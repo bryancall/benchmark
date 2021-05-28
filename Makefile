@@ -20,6 +20,7 @@ PATH:=$(PATH):/opt/h2load/bin
 YSECURE_UNSAFE_LOCK_CALLBACKS=2
 #ATS_DIR=/opt/ats
 ATS_DIR=/opt/amd/trafficserver/9.0/
+NUM_REQ=4000000
 
 test:
 	$(MAKE) http
@@ -50,13 +51,13 @@ log_start:
 
 # Step 4 - run the benchmark
 bench_http:
-	h2load --h1 -t 30 -n 2000000 -c 200 `cat urls.http.config | xargs` | tail -9 > h2load.log
+	h2load --h1 -t 30 -n $(NUM_REQ) -c 200 `cat urls.http.config | xargs` | tail -9 > h2load.log
 
 bench_https:
-	h2load --h1 -t 30 -n 2000000 -c 200 `cat urls.https.config | xargs` | tail -9 > h2load.log
+	h2load --h1 -t 30 -n $(NUM_REQ) -c 200 `cat urls.https.config | xargs` | tail -9 > h2load.log
 
 bench_http2:
-	h2load -t 30 -n 2000000 -c 200 `cat urls.https.config | xargs` | tail -9 > h2load.log
+	h2load -t 30 -n $(NUM_REQ) -c 200 `cat urls.https.config | xargs` | tail -9 > h2load.log
 
 # Step 5 - stop loggging performance data
 log_stop:
