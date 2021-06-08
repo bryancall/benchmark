@@ -1,0 +1,44 @@
+**http2load**
+finished in 272.02s, 29409.24 req/s, 474.80MB/s
+requests: 8000000 total, 8000000 started, 8000000 done, 8000000 succeeded, 0 failed, 0 errored, 0 timeout
+status codes: 8000000 2xx, 0 3xx, 0 4xx, 0 5xx
+traffic: 126.13GB (135432000000) total, 3.53GB (3792000000) headers (space savings 0.00%), 122.07GB (131072000000) data
+                     min         max         mean         sd        +/- sd
+time for request:      244us       2.14s      5.47ms      5.32ms    95.04%
+time for connect:    31.73ms     63.15ms     48.30ms      8.40ms    61.50%
+time to 1st byte:    32.80ms     84.50ms     53.72ms      9.95ms    68.50%
+req/s           :     141.38      320.38      188.97       54.84    75.50%
+
+**dstat**
+Please touch YubiKey to authenticate to o54.ycpi.bf1.yahoo.com
+You did not select any stats, using -cdngy by default.
+[7l----total-cpu-usage---- -dsk/total- ---net/lo-- -net/total- ---paging-- ---system--
+usr sys idl wai hiq siq| read  writ| recv  send: recv  send|  in   out | int   csw 
+  1   0  98   0   0   0|8077B  579k|   0     0 :   0     0 |   0     0 |  65k  104k
+ 89   3   6   0   0   2| 410B   11M|  19M   19M:  20M  636M|   0     0 | 403k  108k
+ 88   3   6   0   0   3|   0    37M|  19M   19M:  20M  652M|   0     0 | 400k  119k
+ 89   3   5   0   0   3|   0   188k|  20M   20M:  20M  671M|   0     0 | 407k  116k
+ 89   3   6   0   0   3| 410B   34M|  20M   20M:  20M  668M|   0     0 | 406k  121k
+ 89   3   6   0   0   3|   0    63M|  20M   20M:  20M  661M|   0     0 | 405k  126k
+ 89   3   6   0   0   3|   0    53k|  20M   20M:  20M  676M|   0     0 | 413k  120k
+ 89   3   6   0   0   2|   0   975k|  20M   20M:  20M  665M|   0     0 | 408k  124k
+ 89   3   6   0   0   2| 410B  110M|  20M   20M:  20M  662M|   0     0 | 422k  116k
+ 89   3   6   0   0   2|   0   203k|  20M   20M:  20M  667M|   0     0 | 412k  118k
+ 89   3   5   0   0   2|8192B  877k|  20M   20M:  21M  668M|   0     0 | 412k  122k
+ 89   3   6   0   0   2|   0    19M|  20M   20M:  20M  662M|   0     0 | 403k  120k
+ 88   3   6   0   0   3|  49k   92M|  19M   19M:  20M  636M|   0     0 | 407k  121k
+ 86   3   8   0   0   2|   0   263k|  18M   18M:  20M  601M|   0     0 | 393k  140k
+ 83   3  12   0   0   2|   0  5554k|  17M   17M:  19M  548M|   0     0 | 373k  153k
+ 75   2  21   0   0   2| 819B   82M|  12M   12M:  17M  451M|   0     0 | 328k  158k
+ 69   2  29   0   0   1|   0  3973k|  13M   13M:  16M  385M|   0     0 | 291k  158k
+ 66   2  31   0   0   1|  38k  194k|  12M   12M:  16M  359M|   0     0 | 287k  171k
+ 61   2  36   0   0   1| 410B   12M|  11M   11M:  15M  340M|   0     0 | 274k  161k
+ 57   1  40   0   0   1|  12k   46M|  11M   11M:  15M  334M|   0     0 | 263k  158k
+ 57   1  40   0   0   1|   0    53k|  11M   11M:  15M  339M|   0     0 | 258k  163k
+ 57   2  41   0   0   1|9421B   35M|  11M   11M:  15M  336M|   0     0 | 259k  156k
+ 57   1  41   0   0   1|  16k 8903k|  11M   11M:  15M  336M|   0     0 | 258k  158k
+ 56   2  41   0   0   1|   0   136k|  11M   11M:  15M  334M|   0     0 | 259k  169k
+ 50   1  47   0   0   1|   0    43M|  10M   10M:  15M  314M|   0     0 | 243k  166k
+ 47   1  51   0   0   1|   0   191k|  10M   10M:  15M  306M|   0     0 | 235k  173k
+ 37   1  61   0   0   1|   0  2992k|9818k 9818k:  14M  298M|   0     0 | 218k  182k
+ 11   1  87   0   0   0|   0    14M|9299k 9299k:  14M  289M|   0     0 | 187k  188k

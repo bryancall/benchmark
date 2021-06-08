@@ -1,0 +1,27 @@
+**http2load**
+finished in 103.09s, 38801.15 req/s, 618.24MB/s
+requests: 4000000 total, 4000000 started, 4000000 done, 4000000 succeeded, 0 failed, 0 errored, 0 timeout
+status codes: 4000000 2xx, 0 3xx, 0 4xx, 0 5xx
+traffic: 62.24GB (66829614837) total, 1023.88MB (1073614837) headers (space savings 0.00%), 61.04GB (65536000000) data
+                     min         max         mean         sd        +/- sd
+time for request:      234us       1.27s      5.60ms     15.41ms    99.14%
+time for connect:      172us     18.91ms      9.58ms      7.13ms    44.50%
+time to 1st byte:     2.03ms    117.39ms     41.12ms     28.30ms    72.50%
+req/s           :     188.53      241.56      202.46       15.84    84.50%
+
+**dstat**
+Please touch YubiKey to authenticate to o51.ycpi.bf1.yahoo.com
+You did not select any stats, using -cdngy by default.
+[7l----total-cpu-usage---- -dsk/total- ---net/lo-- -net/total- ---paging-- ---system--
+usr sys idl wai hiq siq| read  writ| recv  send: recv  send|  in   out | int   csw 
+  1   1  98   0   0   0|  14k  820k|   0     0 :   0     0 |   0     0 |  55k   94k
+ 61  12  26   0   0   2|   0    98k|2732k 2732k:5924k  368M|   0     0 | 488k  291k
+ 63  11  24   0   0   2| 410B   12M|3114k 3114k:8097k  505M|   0     0 | 297k  316k
+ 46   9  43   0   0   2|   0   175k| 560k  560k:  12M  763M|   0     0 | 457k  290k
+ 59  11  28   0   0   2|   0  1208k| 951k  951k:7716k  483M|   0     0 | 332k  289k
+ 57  11  30   0   0   2|   0  3982k|4777k 4777k:8194k  509M|   0     0 | 333k  318k
+ 53  10  35   0   0   2|   0    17M|3634k 3634k:7816k  490M|   0     0 | 371k  308k
+ 51  10  38   0   0   2|   0  4288k|3665k 3665k:  11M  704M|   0     0 | 444k  290k
+ 46   9  43   0   0   1|   0  4652k| 268k  268k:9666k  601M|   0     0 | 456k  286k
+ 46  10  42   0   0   2|   0  4030k| 894k  894k:  13M  809M|   0     0 | 465k  332k
+ 37   8  52   0   0   3|   0  3942k|  10M   10M:  25M 1215M|   0     0 | 586k  255k
