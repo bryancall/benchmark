@@ -1,0 +1,13 @@
+ts:
+  accept_threads: 0
+  exec_thread:
+    autoconfig: 0
+    limit: 16
+    listen: 1
+  udp:
+    threads: 16
+  http:
+    server_ports: 8080 4443:ssl 4443:quic
+    insert_response_via_str: 3
+  diags:
+    show_location: 2

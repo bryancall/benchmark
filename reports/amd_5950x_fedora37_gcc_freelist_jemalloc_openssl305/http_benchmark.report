@@ -1,0 +1,184 @@
+**http2load**
+finished in 35.00s, 544129.27 req/s, 687.05MB/s
+requests: 16323878 total, 16323878 started, 16323878 done, 16323878 succeeded, 0 failed, 0 errored, 0 timeout
+status codes: 16323878 2xx, 0 3xx, 0 4xx, 0 5xx
+traffic: 20.13GB (21612814472) total, 4.43GB (4759121064) headers (space savings 0.00%), 18.23GB (19571646464) data
+                     min         max         mean         sd        +/- sd
+time for request:      107us    257.90ms      1.65ms      2.39ms    98.71%
+time for connect:        0us         0us         0us         0us     0.00%
+time to 1st byte:        0us         0us         0us         0us     0.00%
+req/s           :     481.53     1007.62      604.58      102.89    79.44%
+
+**dstat**
+You did not select any stats, using -cdngy by default.
+----total-usage---- -dsk/total- ---net/lo-- -net/total- ---paging-- ---system--
+usr sys idl wai stl| read  writ| recv  send: recv  send|  in   out | int   csw 
+ 55  45   0   0   0|  24k   17M| 812M  812M:1971B 3630B|   0     0 |4552k 7350k
+ 52  41   0   0   0|   0    18k| 740M  740M:2262B 2552B|   0     0 |4333k 7006k
+ 55  45   0   0   0|   0   190M| 810M  810M:1549B 1799B|   0     0 |4526k 7370k
+**perf stat**
+
+ Performance counter stats for process id '3977874':
+
+        759,892.00 msec task-clock                       #   21.684 CPUs utilized          
+        12,784,749      context-switches                 #   16.824 K/sec                  
+            13,450      cpu-migrations                   #   17.700 /sec                   
+            11,819      page-faults                      #   15.554 /sec                   
+ 2,919,753,119,380      cycles                           #    3.842 GHz                      (83.36%)
+    23,459,926,452      stalled-cycles-frontend          #    0.80% frontend cycles idle     (83.33%)
+   125,131,899,949      stalled-cycles-backend           #    4.29% backend cycles idle      (83.31%)
+ 1,746,289,818,093      instructions                     #    0.60  insn per cycle         
+                                                  #    0.07  stalled cycles per insn  (83.31%)
+   380,618,849,584      branches                         #  500.885 M/sec                    (83.36%)
+     8,103,488,691      branch-misses                    #    2.13% of all branches          (83.34%)
+
+      35.043226915 seconds time elapsed
+
+**perf report**
+# Total Lost Samples: 0
+#
+# Samples: 1M of event 'cycles'
+# Event count (approx.): 4294600624093
+#
+#   Overhead  Shared Object         Symbol                                              IPC   [IPC Coverage]
+# ..........  ....................  ..................................................  ....................
+#
+       3.14%  [kernel.kallsyms]     [k] native_write_msr                                -      -            
+       2.60%  traffic_server        [.] read_from_net                                   -      -            
+       1.68%  [kernel.kallsyms]     [k] native_read_msr                                 -      -            
+       1.62%  traffic_server        [.] UnixNetVConnection::load_buffer_and_write       -      -            
+       1.61%  [kernel.kallsyms]     [k] copy_user_enhanced_fast_string                  -      -            
+       1.19%  [kernel.kallsyms]     [k] check_preemption_disabled                       -      -            
+       0.87%  [kernel.kallsyms]     [k] tcp_ack                                         -      -            
+       0.68%  traffic_server        [.] APIHooks::clear                                 -      -            
+       0.56%  [kernel.kallsyms]     [k] perf_log_itrace_start                           -      -            
+       0.49%  traffic_server        [.] HttpSM::cleanup                                 -      -            
+       0.49%  [kernel.kallsyms]     [k] tcp_v4_rcv                                      -      -            
+       0.48%  [kernel.kallsyms]     [k] avc_has_perm                                    -      -            
+       0.48%  traffic_server        [.] CacheVC::openReadStartHead                      -      -            
+       0.47%  [kernel.kallsyms]     [k] __tcp_transmit_skb                              -      -            
+       0.47%  traffic_server        [.] HttpSM::HttpSM                                  -      -            
+       0.45%  [kernel.kallsyms]     [k] _raw_spin_lock_irqsave                          -      -            
+       0.45%  [kernel.kallsyms]     [k] native_sched_clock                              -      -            
+       0.45%  [kernel.kallsyms]     [k] __x86_indirect_thunk_rax                        -      -            
+       0.44%  traffic_server        [.] mime_hdr_field_find                             -      -            
+       0.44%  [kernel.kallsyms]     [k] tcp_recvmsg_locked                              -      -            
+       0.44%  [kernel.kallsyms]     [k] debug_smp_processor_id                          -      -            
+       0.44%  libc.so.6             [.] __memmove_avx_unaligned_erms                    -      -            
+       0.44%  [kernel.kallsyms]     [k] read_tsc                                        -      -            
+       0.43%  [kernel.kallsyms]     [k] tcp_sendmsg_locked                              -      -            
+       0.43%  libstdc++.so.6.0.30   [.] __cxxabiv1::__vmi_class_type_info::__do_dyncas  -      -            
+       0.41%  [kernel.kallsyms]     [k] tcp_rcv_established                             -      -            
+       0.40%  [kernel.kallsyms]     [k] preempt_count_add                               -      -            
+       0.40%  [vdso]                [.] 0x00000000000006b5                              -      -            
+       0.40%  [kernel.kallsyms]     [k] preempt_count_sub                               -      -            
+       0.39%  [kernel.kallsyms]     [k] tcp_poll                                        -      -            
+       0.39%  [kernel.kallsyms]     [k] do_epoll_wait                                   -      -            
+       0.38%  [kernel.kallsyms]     [k] psi_group_change                                -      -            
+       0.38%  [kernel.kallsyms]     [k] __slab_free                                     -      -            
+       0.38%  [kernel.kallsyms]     [k] tcp_write_xmit                                  -      -            
+       0.36%  traffic_server        [.] HttpTransact::State::State                      -      -            
+       0.36%  traffic_server        [.] HttpTransact::update_size_and_time_stats        -      -            
+       0.34%  [kernel.kallsyms]     [k] ep_poll_callback                                -      -            
+       0.33%  [kernel.kallsyms]     [k] __put_user_nocheck_4                            -      -            
+       0.32%  [kernel.kallsyms]     [k] __check_object_size                             -      -            
+       0.32%  traffic_server        [.] mime_parser_parse                               -      -            
+       0.32%  [kernel.kallsyms]     [k] restore_fpregs_from_fpstate                     -      -            
+       0.31%  [kernel.kallsyms]     [k] __schedule                                      -      -            
+       0.31%  [kernel.kallsyms]     [k] do_epoll_ctl                                    -      -            
+       0.31%  [kernel.kallsyms]     [k] try_to_wake_up                                  -      -            
+       0.30%  traffic_server        [.] HttpSM::setup_cache_read_transfer               -      -            
+       0.30%  libc.so.6             [.] pthread_rwlock_unlock@@GLIBC_2.34               -      -            
+       0.30%  [kernel.kallsyms]     [k] net_rx_action                                   -      -            
+       0.30%  [kernel.kallsyms]     [k] sock_poll                                       -      -            
+       0.29%  [kernel.kallsyms]     [k] __entry_text_start                              -      -            
+       0.29%  libev.so.4.0.0        [.] ev_run                                          -      -            
+       0.29%  traffic_server        [.] HttpSM::attach_client_session                   -      -            
+       0.29%  traffic_server        [.] HdrHeap::allocate_str                           -      -            
+       0.29%  [vdso]                [.] __vdso_clock_gettime                            -      -            
+       0.28%  traffic_server        [.] HttpTransact::HandleCacheOpenReadHit            -      -            
+       0.28%  [kernel.kallsyms]     [k] __skb_datagram_iter                             -      -            
+       0.28%  traffic_server        [.] HdrHeap::duplicate_str                          -      -            
+       0.27%  [kernel.kallsyms]     [k] __mod_timer                                     -      -            
+       0.27%  [kernel.kallsyms]     [k] kfree                                           -      -            
+       0.26%  [kernel.kallsyms]     [k] __netif_receive_skb_core.constprop.0            -      -            
+       0.26%  traffic_server        [.] HttpSM::init                                    -      -            
+       0.26%  [kernel.kallsyms]     [k] ip_finish_output2                               -      -            
+       0.26%  [kernel.kallsyms]     [k] merge_sched_in                                  -      -            
+       0.25%  [kernel.kallsyms]     [k] skb_release_data                                -      -            
+       0.25%  libjemalloc.so.2      [.] free                                            -      -            
+       0.25%  [kernel.kallsyms]     [k] __virt_addr_valid                               -      -            
+       0.25%  [kernel.kallsyms]     [k] x86_pmu_add                                     -      -            
+       0.24%  traffic_server        [.] url_CryptoHash_get_general                      -      -            
+       0.24%  [kernel.kallsyms]     [k] exit_to_user_mode_prepare                       -      -            
+       0.24%  [kernel.kallsyms]     [k] event_sched_out.part.0                          -      -            
+       0.24%  [kernel.kallsyms]     [k] select_task_rq_fair                             -      -            
+       0.24%  traffic_server        [.] HttpHookState::getNext                          -      -            
+       0.24%  [kernel.kallsyms]     [k] amd_pmu_addr_offset                             -      -            
+       0.23%  traffic_server        [.] Cache::open_read                                -      -            
+       0.23%  traffic_server        [.] HttpSM::set_next_state                          -      -            
+       0.23%  traffic_server        [.] HttpTransact::what_is_document_freshness        -      -            
+       0.23%  traffic_server        [.] HttpSM::state_read_client_request_header        -      -            
+       0.23%  libjemalloc.so.2      [.] malloc                                          -      -            
+       0.23%  [kernel.kallsyms]     [k] x86_pmu_commit_txn                              -      -            
+       0.23%  [kernel.kallsyms]     [k] _raw_spin_unlock_irqrestore                     -      -            
+       0.23%  libc.so.6             [.] pthread_mutex_trylock@@GLIBC_2.34               -      -            
+       0.23%  traffic_server        [.] hdrtoken_tokenize                               -      -            
+       0.23%  traffic_server        [.] HttpTunnel::kill_tunnel                         -      -            
+       0.23%  [kernel.kallsyms]     [k] x86_schedule_events                             -      -            
+       0.22%  traffic_server        [.] HttpTransact::initialize_state_variables_from_  -      -            
+       0.22%  traffic_server        [.] HttpSM::state_api_callout                       -      -            
+       0.22%  traffic_server        [.] free_CacheVC                                    -      -            
+       0.22%  traffic_server        [.] CacheVC::openReadMain                           -      -            
+       0.22%  [kernel.kallsyms]     [k] __fget_light                                    -      -            
+       0.22%  traffic_server        [.] RamCacheLRU::get                                -      -            
+       0.22%  traffic_server        [.] HttpTunnel::producer_run                        -      -            
+       0.22%  traffic_server        [.] HttpSM::kill_this                               -      -            
+       0.21%  [kernel.kallsyms]     [k] selinux_socket_recvmsg                          -      -            
+       0.21%  [kernel.kallsyms]     [k] __dev_queue_xmit                                -      -            
+       0.21%  traffic_server        [.] mime_hdr_print                                  -      -            
+       0.21%  traffic_server        [.] HttpTransact::HandleRequest                     -      -            
+       0.21%  [kernel.kallsyms]     [k] tcp_current_mss                                 -      -            
+       0.20%  [kernel.kallsyms]     [k] ___sys_recvmsg                                  -      -            
+       0.20%  [kernel.kallsyms]     [k] load_new_mm_cr3                                 -      -            
+       0.20%  [kernel.kallsyms]     [k] tcp_recvmsg                                     -      -            
+       0.20%  traffic_server        [.] HttpTransact::EndRemapRequest                   -      -            
+       0.20%  [kernel.kallsyms]     [k] __wake_up_common                                -      -            
+       0.20%  traffic_server        [.] UnixNetVConnection::reenable                    -      -            
+       0.19%  [kernel.kallsyms]     [k] tcp_event_data_recv                             -      -            
+       0.19%  [kernel.kallsyms]     [k] try_charge_memcg                                -      -            
+       0.19%  [kernel.kallsyms]     [k] __rcu_read_unlock                               -      -            
+       0.19%  [kernel.kallsyms]     [k] event_sched_in.part.0                           -      -            
+       0.19%  traffic_server        [.] write_to_net_io                                 -      -            
+       0.18%  traffic_server        [.] HdrHeap::destroy                                -      -            
+       0.18%  traffic_server        [.] HttpTransactHeaders::insert_via_header_in_resp  -      -            
+       0.18%  traffic_server        [.] HdrHeap::allocate_obj                           -      -            
+       0.18%  [kernel.kallsyms]     [k] x86_pmu_del                                     -      -            
+       0.18%  traffic_server        [.] UnixNetVConnection::do_io_read                  -      -            
+       0.18%  traffic_server        [.] HttpTransact::client_result_stat                -      -            
+       0.18%  traffic_server        [.] HttpSM::handle_api_return                       -      -            
+       0.18%  [kernel.kallsyms]     [k] __update_load_avg_se                            -      -            
+       0.18%  traffic_server        [.] MIMEScanner::get                                -      -            
+       0.18%  libc.so.6             [.] __strcmp_avx2                                   -      -            
+       0.17%  [kernel.kallsyms]     [k] __local_bh_enable_ip                            -      -            
+       0.17%  [kernel.kallsyms]     [k] pmu_filter_match                                -      -            
+       0.17%  [kernel.kallsyms]     [k] __get_user_8                                    -      -            
+       0.17%  traffic_server        [.] HdrHeap::inherit_string_heaps                   -      -            
+       0.17%  [kernel.kallsyms]     [k] vfs_read                                        -      -            
+       0.17%  [kernel.kallsyms]     [k] visit_groups_merge.constprop.0.isra.0           -      -            
+       0.17%  [kernel.kallsyms]     [k] kmem_cache_alloc_node                           -      -            
+       0.17%  traffic_server        [.] HttpSM::main_handler                            -      -            
+       0.16%  traffic_server        [.] RemapProcessor::setup_for_remap                 -      -            
+       0.16%  traffic_server        [.] HttpTransact::HandleCacheOpenReadHitFreshness   -      -            
+       0.16%  [kernel.kallsyms]     [k] ktime_get                                       -      -            
+       0.16%  [kernel.kallsyms]     [k] __alloc_skb                                     -      -            
+       0.16%  [kernel.kallsyms]     [k] update_curr                                     -      -            
+       0.16%  libc.so.6             [.] pthread_rwlock_rdlock@GLIBC_2.2.5               -      -            
+       0.16%  traffic_server        [.] mime_hdr_field_attach                           -      -            
+       0.16%  [kernel.kallsyms]     [k] __switch_to_asm                                 -      -            
+       0.16%  [kernel.kallsyms]     [k] switch_mm_irqs_off                              -      -            
+       0.16%  libtscore.so.10.0.0   [.] Arena::alloc                                    -      -            
+       0.16%  [kernel.kallsyms]     [k] __update_load_avg_cfs_rq                        -      -            
+       0.15%  [kernel.kallsyms]     [k] ___sys_sendmsg                                  -      -            
+       0.15%  traffic_server        [.] dir_probe                                       -      -            
+       0.15%  libc.so.6             [.] __memchr_avx2                                   -      -            

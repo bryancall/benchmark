@@ -1,0 +1,191 @@
+**http2load**
+finished in 96.41s, 207436.96 req/s, 234.62MB/s
+requests: 20000000 total, 20000000 started, 20000000 done, 20000000 succeeded, 0 failed, 0 errored, 0 timeout
+status codes: 20000000 2xx, 0 3xx, 0 4xx, 0 5xx
+traffic: 22.09GB (23720000000) total, 2.91GB (3120000000) headers (space savings 35.27%), 19.07GB (20480000000) data
+UDP datagram: 28621134 sent, 20501468 received
+                     min         max         mean         sd        +/- sd
+time for request:      405us    326.77ms      3.92ms      2.18ms    79.81%
+time for connect:     5.83ms     42.16ms     18.32ms      9.67ms    68.00%
+time to 1st byte:     8.39ms     49.12ms     23.93ms      9.96ms    70.00%
+req/s           :    1807.24     2619.46     2374.75      175.66    71.00%
+
+**dstat**
+You did not select any stats, using -cdngy by default.
+----total-usage---- -dsk/total- ---net/lo-- -net/total- ---paging-- ---system--
+usr sys idl wai stl| read  writ| recv  send: recv  send|  in   out | int   csw 
+ 74  23   3   0   0| 819B   24M| 298M  298M:4662B 4867B|   0     0 |2714k 3459k
+ 74  23   3   0   0|   0    20k| 297M  297M:1197B 2571B|   0     0 |2727k 3448k
+ 74  23   2   0   0|   0   211k| 296M  296M:1286B 2609B|   0     0 |2723k 3411k
+ 74  23   3   0   0|   0    96M| 293M  293M:1407B 2396B|   0     0 |2732k 3410k
+ 74  23   3   0   0|   0   179k| 293M  293M:2005B 6568B|   0     0 |2728k 3413k
+ 74  23   3   0   0|   0   266k| 292M  292M:1218B 2781B|   0     0 |2729k 3393k
+ 74  23   2   0   0|   0    97M| 292M  292M:3777B 1819B|   0     0 |2738k 3417k
+ 75  23   1   0   0|   0   154k| 282M  282M:1900B   26k|   0     0 |2650k 3513k
+ 75  20   4   0   0|   0    19k| 268M  268M:1089B 2622B|   0     0 |2351k 3355k
+**perf stat**
+
+ Performance counter stats for process id '4068920':
+
+      2,189,831.57 msec task-clock                       #   22.711 CPUs utilized          
+        17,642,791      context-switches                 #    8.057 K/sec                  
+         1,266,049      cpu-migrations                   #  578.149 /sec                   
+         1,219,762      page-faults                      #  557.012 /sec                   
+ 8,657,340,995,509      cycles                           #    3.953 GHz                      (83.33%)
+    52,237,355,207      stalled-cycles-frontend          #    0.60% frontend cycles idle     (83.35%)
+   474,831,328,439      stalled-cycles-backend           #    5.48% backend cycles idle      (83.33%)
+ 5,444,636,735,393      instructions                     #    0.63  insn per cycle         
+                                                  #    0.09  stalled cycles per insn  (83.34%)
+ 1,082,407,380,089      branches                         #  494.288 M/sec                    (83.34%)
+    39,681,098,366      branch-misses                    #    3.67% of all branches          (83.32%)
+
+      96.423325697 seconds time elapsed
+
+**perf report**
+# Total Lost Samples: 0
+#
+# Samples: 2M of event 'cycles'
+# Event count (approx.): 11009349586510
+#
+#   Overhead  Shared Object         Symbol                                              IPC   [IPC Coverage]
+# ..........  ....................  ..................................................  ....................
+#
+       3.89%  libtscore.so.10.0.0   [.] freelist_new                                    -      -            
+       1.89%  [kernel.kallsyms]     [k] native_write_msr                                -      -            
+       1.75%  libc.so.6             [.] __memmove_avx_unaligned_erms                    -      -            
+       1.23%  libquiche.so          [.] <&mut W as core::fmt::Write>::write_str         -      -            
+       1.08%  libquiche.so          [.] core::fmt::write                                -      -            
+       1.05%  libtscore.so.10.0.0   [.] freelist_free                                   -      -            
+       0.99%  [kernel.kallsyms]     [k] native_read_msr                                 -      -            
+       0.80%  [kernel.kallsyms]     [k] copy_user_enhanced_fast_string                  -      -            
+       0.70%  libjemalloc.so.2      [.] free                                            -      -            
+       0.68%  traffic_server        [.] UDPNetProcessorInternal::udp_read_from_net      -      -            
+       0.65%  libnghttp3.so.3.0.2   [.] nghttp3_qpack_huffman_decode                    -      -            
+       0.64%  traffic_server        [.] QPACK::_encode_header                           -      -            
+       0.58%  traffic_server        [.] huffman_decode                                  -      -            
+       0.54%  [kernel.kallsyms]     [k] check_preemption_disabled                       -      -            
+       0.54%  libquiche.so          [.] quiche::Connection::send_single                 -      -            
+       0.52%  traffic_server        [.] Http3Transaction::~Http3Transaction             -      -            
+       0.52%  libquiche.so          [.] core::fmt::Formatter::pad_integral              -      -            
+       0.50%  traffic_server        [.] mime_parser_parse                               -      -            
+       0.49%  traffic_server        [.] hdrtoken_tokenize                               -      -            
+       0.49%  libjemalloc.so.2      [.] aligned_alloc                                   -      -            
+       0.48%  libstdc++.so.6.0.30   [.] __cxxabiv1::__vmi_class_type_info::__do_dyncas  -      -            
+       0.48%  traffic_server        [.] QPACK::encode                                   -      -            
+       0.47%  libngtcp2.so.9.0.1    [.] conn_write_pkt                                  -      -            
+       0.42%  traffic_server        [.] mime_hdr_field_find                             -      -            
+       0.40%  traffic_server        [.] IOBufferBlock::clear                            -      -            
+       0.40%  libquiche.so          [.] quiche::Connection::recv                        -      -            
+       0.39%  libjemalloc.so.2      [.] malloc                                          -      -            
+       0.38%  libnghttp3.so.3.0.2   [.] nghttp3_qpack_decoder_read_request              -      -            
+       0.36%  libquiche.so          [.] core::fmt::num::imp::<impl core::fmt::Display   -      -            
+       0.36%  [kernel.kallsyms]     [k] ep_poll_callback                                -      -            
+       0.32%  traffic_server        [.] EThread::process_event                          -      -            
+       0.31%  traffic_server        [.] IOBufferData::dealloc                           -      -            
+       0.30%  [vdso]                [.] 0x00000000000006b5                              -      -            
+       0.30%  [kernel.kallsyms]     [k] perf_log_itrace_start                           -      -            
+       0.29%  libcrypto.so.81.1.1   [.] _aesni_ctr32_ghash_6x                           -      -            
+       0.29%  traffic_server        [.] APIHooks::clear                                 -      -            
+       0.29%  libngtcp2.so.9.0.1    [.] ngtcp2_conn_write_vmsg                          -      -            
+       0.28%  [kernel.kallsyms]     [k] udp_sendmsg                                     -      -            
+       0.27%  traffic_server        [.] VersionConverter::convert                       -      -            
+       0.27%  [kernel.kallsyms]     [k] psi_group_change                                -      -            
+       0.27%  [kernel.kallsyms]     [k] native_sched_clock                              -      -            
+       0.26%  libquiche.so          [.] core::fmt::Formatter::pad                       -      -            
+       0.25%  libquiche.so          [.] core::fmt::builders::DebugStruct::field         -      -            
+       0.25%  [kernel.kallsyms]     [k] debug_smp_processor_id                          -      -            
+       0.25%  [kernel.kallsyms]     [k] __x86_indirect_thunk_rax                        -      -            
+       0.25%  [kernel.kallsyms]     [k] try_to_wake_up                                  -      -            
+       0.24%  traffic_server        [.] Http3App::on_new_stream                         -      -            
+       0.24%  [kernel.kallsyms]     [k] do_epoll_wait                                   -      -            
+       0.24%  libquiche.so          [.] _aesni_ctr32_ghash_6x                           -      -            
+       0.24%  [kernel.kallsyms]     [k] preempt_count_sub                               -      -            
+       0.23%  [kernel.kallsyms]     [k] __ip_append_data                                -      -            
+       0.22%  traffic_server        [.] huffman_encode                                  -      -            
+       0.22%  traffic_server        [.] HttpSM::cleanup                                 -      -            
+       0.22%  traffic_server        [.] CacheVC::openReadStartHead                      -      -            
+       0.21%  libquiche.so          [.] <core::fmt::Formatter as core::fmt::Write>::wr  -      -            
+       0.21%  [kernel.kallsyms]     [k] __entry_text_start                              -      -            
+       0.21%  libquiche.so          [.] core::fmt::Formatter::pad_integral::write_pref  -      -            
+       0.21%  traffic_server        [.] HdrHeap::duplicate_str                          -      -            
+       0.20%  [vdso]                [.] __vdso_clock_gettime                            -      -            
+       0.20%  traffic_server        [.] Http3Transaction::Http3Transaction              -      -            
+       0.20%  libngtcp2.so.9.0.1    [.] conn_recv_pkt                                   -      -            
+       0.20%  libc.so.6             [.] toupper                                         -      -            
+       0.20%  traffic_server        [.] HttpTransact::update_size_and_time_stats        -      -            
+       0.20%  [kernel.kallsyms]     [k] native_queued_spin_lock_slowpath                -      -            
+       0.20%  libc.so.6             [.] __memcmp_avx2_movbe                             -      -            
+       0.20%  [kernel.kallsyms]     [k] __wake_up_common                                -      -            
+       0.19%  traffic_server        [.] HttpSM::HttpSM                                  -      -            
+       0.19%  [kernel.kallsyms]     [k] __check_object_size                             -      -            
+       0.19%  libc.so.6             [.] __memchr_avx2                                   -      -            
+       0.19%  traffic_server        [.] MIMEScanner::get                                -      -            
+       0.19%  [kernel.kallsyms]     [k] avc_has_perm                                    -      -            
+       0.19%  libquiche.so          [.] <core::time::Duration as core::fmt::Debug>::fm  -      -            
+       0.18%  [kernel.kallsyms]     [k] preempt_count_add                               -      -            
+       0.18%  traffic_server        [.] Http3App::_handle_bidi_stream_on_write_complet  -      -            
+       0.18%  libtscore.so.10.0.0   [.] Arena::alloc                                    -      -            
+       0.18%  traffic_server        [.] mime_hdr_field_attach                           -      -            
+       0.17%  [kernel.kallsyms]     [k] osq_lock                                        -      -            
+       0.17%  traffic_server        [.] HttpSM::state_read_client_request_header        -      -            
+       0.17%  [kernel.kallsyms]     [k] __put_user_nocheck_4                            -      -            
+       0.17%  [kernel.kallsyms]     [k] __schedule                                      -      -            
+       0.16%  libquiche.so          [.] alloc::raw_vec::RawVec<T,A>::reserve::do_reser  -      -            
+       0.16%  [kernel.kallsyms]     [k] amd_pmu_addr_offset                             -      -            
+       0.16%  [kernel.kallsyms]     [k] fib_table_lookup                                -      -            
+       0.16%  [kernel.kallsyms]     [k] exit_to_user_mode_prepare                       -      -            
+       0.16%  libev.so.4.0.0        [.] ev_run                                          -      -            
+       0.16%  [kernel.kallsyms]     [k] __ip_make_skb                                   -      -            
+       0.16%  traffic_server        [.] MIOBuffer::write                                -      -            
+       0.15%  libquiche.so          [.] <core::time::Duration as core::fmt::Debug>::fm  -      -            
+       0.15%  traffic_server        [.] HdrHeap::allocate_str                           -      -            
+       0.15%  libc.so.6             [.] __memset_avx2_unaligned_erms                    -      -            
+       0.15%  libquiche.so          [.] quiche::stream::StreamMap::get_or_create        -      -            
+       0.15%  libc.so.6             [.] pthread_mutex_trylock@@GLIBC_2.34               -      -            
+       0.15%  traffic_server        [.] Http3Transaction::state_stream_open             -      -            
+       0.15%  libc.so.6             [.] __GI___pthread_mutex_unlock_usercnt             -      -            
+       0.15%  [kernel.kallsyms]     [k] merge_sched_in                                  -      -            
+       0.15%  traffic_server        [.] IOBufferBlock::alloc                            -      -            
+       0.15%  traffic_server        [.] Http3FrameDispatcher::on_read_ready             -      -            
+       0.15%  [kernel.kallsyms]     [k] x86_schedule_events                             -      -            
+       0.15%  traffic_server        [.] MIOBuffer::append_block_internal                -      -            
+       0.15%  libc.so.6             [.] pthread_mutex_lock@@GLIBC_2.2.5                 -      -            
+       0.15%  libc.so.6             [.] __strcmp_avx2                                   -      -            
+       0.15%  [kernel.kallsyms]     [k] ip_route_output_key_hash_rcu                    -      -            
+       0.15%  libquiche.so          [.] alloc::raw_vec::finish_grow                     -      -            
+       0.15%  [kernel.kallsyms]     [k] restore_fpregs_from_fpstate                     -      -            
+       0.15%  traffic_server        [.] Http3HeaderFramer::_generate_header_block       -      -            
+       0.15%  [kernel.kallsyms]     [k] x86_pmu_add                                     -      -            
+       0.15%  [kernel.kallsyms]     [k] __netif_receive_skb_core.constprop.0            -      -            
+       0.15%  traffic_server        [.] non-virtual thunk to QUICStreamVCAdapter::_rea  -      -            
+       0.14%  libnghttp3.so.3.0.2   [.] nghttp3_conn_writev_stream                      -      -            
+       0.14%  libnghttp3.so.3.0.2   [.] nghttp3_conn_read_bidi                          -      -            
+       0.14%  libnghttp3.so.3.0.2   [.] nghttp3_check_header_value                      -      -            
+       0.14%  [kernel.kallsyms]     [k] __rcu_read_unlock                               -      -            
+       0.14%  [kernel.kallsyms]     [k] __fget_light                                    -      -            
+       0.14%  libc.so.6             [.] __vfprintf_internal                             -      -            
+       0.14%  [kernel.kallsyms]     [k] event_sched_out.part.0                          -      -            
+       0.13%  traffic_server        [.] HttpSM::setup_cache_read_transfer               -      -            
+       0.13%  libquiche.so          [.] core::fmt::num::<impl core::fmt::LowerHex for   -      -            
+       0.13%  traffic_server        [.] IOBufferReader::read                            -      -            
+       0.13%  traffic_server        [.] HttpTransact::State::State                      -      -            
+       0.13%  traffic_server        [.] HttpTransact::initialize_state_variables_from_  -      -            
+       0.13%  traffic_server        [.] Http3Transaction::_process_read_vio             -      -            
+       0.13%  libquiche.so          [.] alloc::fmt::format::format_inner                -      -            
+       0.13%  [kernel.kallsyms]     [k] __udp4_lib_rcv                                  -      -            
+       0.13%  traffic_server        [.] HttpTransact::HandleCacheOpenReadHit            -      -            
+       0.13%  [kernel.kallsyms]     [k] x86_pmu_commit_txn                              -      -            
+       0.13%  libquiche.so          [.] quiche::recovery::Recovery::on_ack_received     -      -            
+       0.13%  libcrypto.so.81.1.1   [.] EVP_CipherInit_ex                               -      -            
+       0.13%  traffic_server        [.] EThread::process_queue                          -      -            
+       0.13%  libc.so.6             [.] pthread_rwlock_unlock@@GLIBC_2.34               -      -            
+       0.13%  traffic_server        [.] IOBufferBlock::free                             -      -            
+       0.13%  libnghttp3.so.3.0.2   [.] qpack_lookup_token                              -      -            
+       0.13%  [kernel.kallsyms]     [k] __import_iovec                                  -      -            
+       0.13%  [kernel.kallsyms]     [k] _raw_spin_lock_irqsave                          -      -            
+       0.13%  traffic_server        [.] EThread::schedule                               -      -            
+       0.13%  traffic_server        [.] HttpTransact::what_is_document_freshness        -      -            
+       0.13%  libnghttp3.so.3.0.2   [.] conn_decode_headers                             -      -            
+       0.12%  traffic_server        [.] HttpSM::set_next_state                          -      -            
+       0.12%  traffic_server        [.] HttpTunnel::producer_run                        -      -            
+       0.12%  libquiche.so          [.] quiche::stream::SendBuf::emit                   -      -            

@@ -1,0 +1,184 @@
+**http2load**
+finished in 38.47s, 519823.85 req/s, 520.53MB/s
+requests: 20000000 total, 20000000 started, 20000000 done, 20000000 succeeded, 0 failed, 0 errored, 0 timeout
+status codes: 20000000 2xx, 0 3xx, 0 4xx, 0 5xx
+traffic: 19.56GB (21000038788) total, 152.62MB (160035788) headers (space savings 96.67%), 19.07GB (20480000000) data
+                     min         max         mean         sd        +/- sd
+time for request:       73us     51.28ms      1.30ms       786us    79.45%
+time for connect:     4.25ms     57.15ms     26.53ms     16.44ms    50.00%
+time to 1st byte:     4.65ms     68.81ms     36.20ms     18.25ms    58.00%
+req/s           :    4838.88    17288.11     7722.44     2490.23    82.00%
+
+**dstat**
+You did not select any stats, using -cdngy by default.
+----total-usage---- -dsk/total- ---net/lo-- -net/total- ---paging-- ---system--
+usr sys idl wai stl| read  writ| recv  send: recv  send|  in   out | int   csw 
+ 84  14   1   0   0|   0   942k| 683M  683M:1193B 3541B|   0     0 |1807k 1907k
+ 80  12   7   0   0|   0   166M| 670M  670M:2159B 3269B|   0     0 |1767k 1858k
+ 57   7  36   0   0|   0    48k| 578M  578M:1204B 1883B|   0     0 |1617k 1788k
+**perf stat**
+
+ Performance counter stats for process id '3978635':
+
+        712,330.07 msec task-clock                       #   18.510 CPUs utilized          
+         2,055,128      context-switches                 #    2.885 K/sec                  
+            77,163      cpu-migrations                   #  108.325 /sec                   
+             9,303      page-faults                      #   13.060 /sec                   
+ 2,837,463,180,516      cycles                           #    3.983 GHz                      (83.33%)
+    16,307,783,911      stalled-cycles-frontend          #    0.57% frontend cycles idle     (83.32%)
+    95,717,694,437      stalled-cycles-backend           #    3.37% backend cycles idle      (83.35%)
+ 2,159,642,108,875      instructions                     #    0.76  insn per cycle         
+                                                  #    0.04  stalled cycles per insn  (83.34%)
+   451,868,763,382      branches                         #  634.353 M/sec                    (83.34%)
+    11,700,198,466      branch-misses                    #    2.59% of all branches          (83.31%)
+
+      38.482497183 seconds time elapsed
+
+**perf report**
+# Total Lost Samples: 0
+#
+# Samples: 1M of event 'cycles'
+# Event count (approx.): 3321560412260
+#
+#   Overhead  Shared Object         Symbol                                              IPC   [IPC Coverage]
+# ..........  ....................  ..................................................  ....................
+#
+       1.86%  traffic_server        [.] HpackDynamicTable::lookup                       -      -            
+       1.38%  traffic_server        [.] mime_parser_parse                               -      -            
+       1.38%  traffic_server        [.] mime_hdr_field_find                             -      -            
+       1.32%  traffic_server        [.] hdrtoken_tokenize                               -      -            
+       1.28%  libstdc++.so.6.0.30   [.] __cxxabiv1::__vmi_class_type_info::__do_dyncas  -      -            
+       1.07%  libc.so.6             [.] __memmove_avx_unaligned_erms                    -      -            
+       0.86%  [kernel.kallsyms]     [k] native_write_msr                                -      -            
+       0.86%  traffic_server        [.] APIHooks::clear                                 -      -            
+       0.79%  traffic_server        [.] VersionConverter::convert                       -      -            
+       0.75%  libcrypto.so.81.1.1   [.] _aesni_ctr32_ghash_6x                           -      -            
+       0.72%  libc.so.6             [.] __strncasecmp_l_avx2                            -      -            
+       0.64%  libtscore.so.10.0.0   [.] freelist_new                                    -      -            
+       0.60%  libnghttp2.so.14.24.  [.] nghttp2_session_mem_recv                        -      -            
+       0.59%  traffic_server        [.] huffman_decode                                  -      -            
+       0.58%  traffic_server        [.] HttpSM::cleanup                                 -      -            
+       0.57%  traffic_server        [.] HdrHeap::duplicate_str                          -      -            
+       0.57%  traffic_server        [.] CacheVC::openReadStartHead                      -      -            
+       0.56%  traffic_server        [.] HpackIndexingTable::lookup                      -      -            
+       0.55%  libc.so.6             [.] toupper                                         -      -            
+       0.54%  traffic_server        [.] HttpSM::HttpSM                                  -      -            
+       0.51%  traffic_server        [.] MIMEScanner::get                                -      -            
+       0.50%  traffic_server        [.] HttpTransact::update_size_and_time_stats        -      -            
+       0.49%  libc.so.6             [.] __memchr_avx2                                   -      -            
+       0.49%  [kernel.kallsyms]     [k] copy_user_enhanced_fast_string                  -      -            
+       0.47%  libjemalloc.so.2      [.] free                                            -      -            
+       0.46%  [kernel.kallsyms]     [k] native_read_msr                                 -      -            
+       0.46%  traffic_server        [.] hpack_encode_header_block                       -      -            
+       0.45%  traffic_server        [.] mime_hdr_field_attach                           -      -            
+       0.44%  traffic_server        [.] HttpSM::state_read_client_request_header        -      -            
+       0.44%  [vdso]                [.] 0x00000000000006b5                              -      -            
+       0.41%  traffic_server        [.] HdrHeap::allocate_str                           -      -            
+       0.39%  libnghttp2.so.14.24.  [.] nghttp2_hd_inflate_hd_nv                        -      -            
+       0.39%  libc.so.6             [.] __strcmp_avx2                                   -      -            
+       0.38%  traffic_server        [.] HttpTransact::State::State                      -      -            
+       0.38%  libc.so.6             [.] __memcmp_avx2_movbe                             -      -            
+       0.38%  libc.so.6             [.] pthread_rwlock_unlock@@GLIBC_2.34               -      -            
+       0.37%  [kernel.kallsyms]     [k] check_preemption_disabled                       -      -            
+       0.35%  libnghttp2.so.14.24.  [.] nghttp2_check_header_value                      -      -            
+       0.34%  libstdc++.so.6.0.30   [.] __cxxabiv1::__class_type_info::__do_dyncast     -      -            
+       0.33%  traffic_server        [.] HttpTransact::HandleCacheOpenReadHit            -      -            
+       0.33%  libc.so.6             [.] __vfprintf_internal                             -      -            
+       0.33%  traffic_server        [.] mime_mem_print                                  -      -            
+       0.33%  traffic_server        [.] HttpSM::attach_client_session                   -      -            
+       0.33%  traffic_server        [.] MIMEField::value_get                            -      -            
+       0.33%  traffic_server        [.] HttpSM::init                                    -      -            
+       0.32%  traffic_server        [.] HttpSM::main_handler                            -      -            
+       0.31%  traffic_server        [.] Http2Stream::~Http2Stream                       -      -            
+       0.31%  traffic_server        [.] CacheVC::openReadMain                           -      -            
+       0.30%  traffic_server        [.] mime_hdr_print                                  -      -            
+       0.30%  traffic_server        [.] url_CryptoHash_get_general                      -      -            
+       0.30%  traffic_server        [.] HttpSM::setup_cache_read_transfer               -      -            
+       0.30%  traffic_server        [.] MIMEField::name_get                             -      -            
+       0.29%  traffic_server        [.] VersionConverter::_convert_req_from_2_to_1      -      -            
+       0.29%  traffic_server        [.] Http2ConnectionState::rcv_headers_frame         -      -            
+       0.29%  traffic_server        [.] HttpTunnel::producer_run                        -      -            
+       0.29%  libtscore.so.10.0.0   [.] freelist_free                                   -      -            
+       0.29%  traffic_server        [.] HttpSM::kill_this                               -      -            
+       0.29%  traffic_server        [.] HttpTransact::what_is_document_freshness        -      -            
+       0.28%  libnghttp2.so.14.24.  [.] nghttp2_http_on_header                          -      -            
+       0.28%  traffic_server        [.] HdrHeap::destroy                                -      -            
+       0.28%  traffic_server        [.] HttpSM::state_api_callout                       -      -            
+       0.28%  traffic_server        [.] HttpSM::set_next_state                          -      -            
+       0.27%  libjemalloc.so.2      [.] malloc                                          -      -            
+       0.27%  traffic_server        [.] HttpTransact::HandleRequest                     -      -            
+       0.27%  traffic_server        [.] MIOBuffer::append_block_internal                -      -            
+       0.27%  traffic_server        [.] HdrCsvIter::find_csv                            -      -            
+       0.27%  traffic_server        [.] RamCacheLRU::get                                -      -            
+       0.27%  traffic_server        [.] HttpHookState::getNext                          -      -            
+       0.27%  traffic_server        [.] free_CacheVC                                    -      -            
+       0.26%  traffic_server        [.] url_parse_internet                              -      -            
+       0.26%  traffic_server        [.] HttpTransact::initialize_state_variables_from_  -      -            
+       0.26%  libjemalloc.so.2      [.] aligned_alloc                                   -      -            
+       0.25%  traffic_server        [.] Cache::open_read                                -      -            
+       0.25%  traffic_server        [.] Http2Stream::Http2Stream                        -      -            
+       0.25%  traffic_server        [.] HttpTransact::EndRemapRequest                   -      -            
+       0.25%  traffic_server        [.] Http2ConnectionState::send_a_data_frame         -      -            
+       0.24%  traffic_server        [.] HttpTransact::client_result_stat                -      -            
+       0.23%  traffic_server        [.] UrlImpl::url_is_mostly_compliant                -      -            
+       0.23%  traffic_server        [.] HttpTransactHeaders::insert_via_header_in_resp  -      -            
+       0.23%  traffic_server        [.] HttpTunnel::kill_tunnel                         -      -            
+       0.23%  traffic_server        [.] HttpSM::check_sni_host                          -      -            
+       0.22%  traffic_server        [.] RemapProcessor::setup_for_remap                 -      -            
+       0.22%  traffic_server        [.] Http2Stream::signal_write_event                 -      -            
+       0.22%  libnghttp2.so.14.24.  [.] nghttp2_check_header_name                       -      -            
+       0.21%  traffic_server        [.] HdrHeap::allocate_obj                           -      -            
+       0.21%  traffic_server        [.] HttpSM::handle_api_return                       -      -            
+       0.21%  traffic_server        [.] mime_field_value_set                            -      -            
+       0.21%  traffic_server        [.] HttpTransact::ModifyRequest                     -      -            
+       0.21%  traffic_server        [.] Http2Stream::reenable                           -      -            
+       0.20%  traffic_server        [.] Http2Stream::initiating_close                   -      -            
+       0.20%  traffic_server        [.] HdrHeap::inherit_string_heaps                   -      -            
+       0.20%  traffic_server        [.] HttpTransactCache::calculate_quality_of_match   -      -            
+       0.20%  libc.so.6             [.] pthread_rwlock_rdlock@GLIBC_2.2.5               -      -            
+       0.20%  [vdso]                [.] __vdso_clock_gettime                            -      -            
+       0.20%  traffic_server        [.] Http2Stream::update_read_request                -      -            
+       0.20%  traffic_server        [.] CacheVC::CacheVC                                -      -            
+       0.19%  libnghttp2.so.14.24.  [.] nghttp2_hd_deflate_hd_bufs                      -      -            
+       0.19%  traffic_server        [.] HpackIndexingTable::get_header_field            -      -            
+       0.19%  traffic_server        [.] HttpTransact::HandleCacheOpenReadHitFreshness   -      -            
+       0.19%  traffic_server        [.] HttpTransact::DecideCacheLookup                 -      -            
+       0.19%  traffic_server        [.] Http2Stream::update_write_request               -      -            
+       0.19%  libc.so.6             [.] isspace                                         -      -            
+       0.19%  traffic_server        [.] MIMEHdrImpl::recompute_cooked_stuff             -      -            
+       0.19%  traffic_server        [.] dir_probe                                       -      -            
+       0.19%  traffic_server        [.] mime_field_name_value_set                       -      -            
+       0.18%  traffic_server        [.] HttpTransact::build_response                    -      -            
+       0.18%  traffic_server        [.] url_print                                       -      -            
+       0.18%  libtscore.so.10.0.0   [.] Arena::alloc                                    -      -            
+       0.18%  libc.so.6             [.] pthread_mutex_trylock@@GLIBC_2.34               -      -            
+       0.18%  [kernel.kallsyms]     [k] tcp_ack                                         -      -            
+       0.18%  libc.so.6             [.] isprint                                         -      -            
+       0.18%  traffic_server        [.] RemapProcessor::finish_remap                    -      -            
+       0.18%  traffic_server        [.] (anonymous namespace)::escapify_url_common      -      -            
+       0.18%  traffic_server        [.] Http2Stream::change_state                       -      -            
+       0.18%  traffic_server        [.] http2_decode_header_blocks                      -      -            
+       0.17%  traffic_server        [.] HttpTunnel::HttpTunnel                          -      -            
+       0.17%  traffic_server        [.] HttpSM::do_api_callout                          -      -            
+       0.17%  traffic_server        [.] HttpSM::do_remap_request                        -      -            
+       0.17%  traffic_server        [.] UrlRewrite::_mappingLookup                      -      -            
+       0.17%  [kernel.kallsyms]     [k] debug_smp_processor_id                          -      -            
+       0.17%  traffic_server        [.] HTTPHdr::parse_req                              -      -            
+       0.17%  libc.so.6             [.] __memset_avx2_unaligned_erms                    -      -            
+       0.17%  traffic_server        [.] MIOBuffer::append_block                         -      -            
+       0.17%  traffic_server        [.] Http2ConnectionState::delete_stream             -      -            
+       0.17%  traffic_server        [.] LogObject::log                                  -      -            
+       0.16%  traffic_server        [.] Http2ConnectionState::create_stream             -      -            
+       0.16%  traffic_server        [.] Http2Stream::send_tracked_event                 -      -            
+       0.16%  traffic_server        [.] HttpSM::tunnel_handler_ua                       -      -            
+       0.16%  traffic_server        [.] HttpSM::call_transact_and_set_next_state        -      -            
+       0.16%  traffic_server        [.] Http2Stream::do_io_write                        -      -            
+       0.16%  [kernel.kallsyms]     [k] psi_group_change                                -      -            
+       0.16%  traffic_server        [.] toupper@plt                                     -      -            
+       0.16%  traffic_server        [.] LogFieldList::marshal_len                       -      -            
+       0.16%  [kernel.kallsyms]     [k] read_tsc                                        -      -            
+       0.15%  traffic_server        [.] HttpTransact::build_response_from_cache         -      -            
+       0.15%  traffic_server        [.] Http2Stream::send_request                       -      -            
+       0.15%  [kernel.kallsyms]     [k] __x86_indirect_thunk_rax                        -      -            
+       0.15%  traffic_server        [.] Http2Stream::signal_read_event                  -      -            
+       0.15%  traffic_server        [.] new_HdrHeap                                     -      -            
