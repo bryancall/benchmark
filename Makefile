@@ -18,9 +18,10 @@
 TS_RUNROOT:=$(shell pwd)
 YSECURE_UNSAFE_LOCK_CALLBACKS=2
 ATS_DIR=/opt/ats
-NUM_REQ=20000000
-NUM_REQ2=$$((20000000 * 2))
+NUM_REQ=100000000
 REMOTE_BENCHMARK=/home/bcall/dev/benchmark
+H2LOAD_THREADS=32
+DURATION=60
 
 test:
 	$(MAKE) http
@@ -49,24 +50,25 @@ prime_https:
 
 # Step 3 - start logging performance data
 log_start:
-	dstat -Nlo,total 10 >& dstat.log &
+	dstat -Nlo,total 5 >& dstat.log &
 	sudo perf record -F 1000 -a sleep 1200 &
 	sudo perf stat -p `pidof traffic_server` >& perf-stat.log &
+	sudo perf trace -s -p `pidof traffic_server` >& perf-trace.log &
 
 # Step 4 - run the benchmark
 bench_http:
-	#/opt/bin/h2load --h1 -t 30 -n $(NUM_REQ2) -c 1000 `cat urls.http.config | xargs` | tail -9 > h2load.log
-	/opt/bin/h2load --h1 --warm-up-time 5 -D 30 -t 30 -n $(NUM_REQ2) -c 900 `cat urls.http.config | xargs` | tail -9 > h2load.log
+	/opt/bin/h2load --h1 --warm-up-time 5 -D $(DURATION) -t $(H2LOAD_THREADS) -n $(NUM_REQ) -c 900 `cat urls.http.config | xargs` | tail -9 > h2load.log
 
 bench_https:
-	/opt/bin/h2load --h1 -t 30 -n $(NUM_REQ) -c 900 `cat urls.https.config | xargs` | tail -9 > h2load.log
+	/opt/bin/h2load --h1 --warm-up-time 5 -D $(DURATION) -t $(H2LOAD_THREADS) -n $(NUM_REQ) -c 900 `cat urls.https.config | xargs` | tail -9 > h2load.log
 
 bench_http2:
-	/opt/bin/h2load -t 30 -n $(NUM_REQ) -m 9 -c 100 `cat urls.https.config | xargs` | tail -9 > h2load.log
+	/opt/bin/h2load --warm-up-time 5 -D $(DURATION) -t $(H2LOAD_THREADS) -n $(NUM_REQ) -m 9 -c 100 `cat urls.https.config | xargs` | tail -9 > h2load.log
 
 bench_http3:
-	/opt/bin/h2load -t 30 -n $(NUM_REQ) -m 9 -c 100 --npn-list=h3 `cat urls.https.config | xargs` | tail -10 > h2load.log
+	/opt/bin/h2load --warm-up-time 5 -D 30 -t $(H2LOAD_THREADS) -n $(NUM_REQ) -m 9 -c 100 --npn-list=h3 `cat urls.https.config | xargs` | tail -10 > h2load.log
 
+#
 # Step 5 - stop loggging performance data
 log_stop:
 	#killall dstat
@@ -76,6 +78,7 @@ log_stop:
 	while [ `ps axuw | grep perf | grep -v grep | wc -l` != '0' ]; do echo "perf still running"; sleep 1; done
 	sleep 1
 	sudo perf report -sdso,symbol --stdio  -w10,20,50 | grep -v h2load | grep -v swapper | head -150 | tail -147 > perf-report.log
+	#killall strace
 
 # Step 6 - make a report
 report:
@@ -87,6 +90,8 @@ report:
 	cat perf-stat.log >> report
 	echo '**perf report**' >> report
 	cat perf-report.log >> report
+	echo '**perf trace**' >> report
+	grep -v LOST perf-trace.log >> report
 
 # Define the tests and generate the report
 http: setup prime_http log_start bench_http log_stop report
@@ -101,9 +106,13 @@ http2: setup prime_https log_start bench_http2 log_stop report
 http3: setup prime_https log_start bench_http3 log_stop report
 	mv report http3_benchmark.report
 
-update_url_files:
+update_client:
 	sed -i "s/127.0.0.1/$(CLIENT_IP)/" urls.http.config
 	sed -i "s/127.0.0.1/$(CLIENT_IP)/" urls.https.config
+
+update_size:
+	sed -i "s/1024/$(SIZE)/" urls.http.config
+	sed -i "s/1024/$(SIZE)/" urls.https.config
 
 clean:
 	rm -f *.log perf.data* *report
