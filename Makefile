@@ -19,9 +19,9 @@ TS_RUNROOT:=$(shell pwd)
 YSECURE_UNSAFE_LOCK_CALLBACKS=2
 ATS_DIR=/opt/ats
 NUM_REQ=100000000
-REMOTE_BENCHMARK=/home/bcall/dev/benchmark
-H2LOAD_THREADS=32
+H2LOAD_THREADS=24
 DURATION=60
+#SSH_COMMAND=ssh eris
 
 test:
 	$(MAKE) http
@@ -57,16 +57,16 @@ log_start:
 
 # Step 4 - run the benchmark
 bench_http:
-	/opt/bin/h2load --h1 --warm-up-time 5 -D $(DURATION) -t $(H2LOAD_THREADS) -n $(NUM_REQ) -c 900 `cat urls.http.config | xargs` | tail -9 > h2load.log
+	$(SSH_COMMAND) /opt/bin/h2load --h1 --warm-up-time 5 -D $(DURATION) -t $(H2LOAD_THREADS) -n $(NUM_REQ) -c 900 `cat urls.http.config | xargs` | tail -9 > h2load.log
 
 bench_https:
-	/opt/bin/h2load --h1 --warm-up-time 5 -D $(DURATION) -t $(H2LOAD_THREADS) -n $(NUM_REQ) -c 900 `cat urls.https.config | xargs` | tail -9 > h2load.log
+	 $(SSH_COMMAND) /opt/bin/h2load --h1 --warm-up-time 5 -D $(DURATION) -t $(H2LOAD_THREADS) -n $(NUM_REQ) -c 900 `cat urls.https.config | xargs` | tail -9 > h2load.log
 
 bench_http2:
-	/opt/bin/h2load --warm-up-time 5 -D $(DURATION) -t $(H2LOAD_THREADS) -n $(NUM_REQ) -m 9 -c 100 `cat urls.https.config | xargs` | tail -9 > h2load.log
+	$(SSH_COMMAND) /opt/bin/h2load --warm-up-time 5 -D $(DURATION) -t $(H2LOAD_THREADS) -n $(NUM_REQ) -m 9 -c 100 `cat urls.https.config | xargs` | tail -9 > h2load.log
 
 bench_http3:
-	/opt/bin/h2load --warm-up-time 5 -D 30 -t $(H2LOAD_THREADS) -n $(NUM_REQ) -m 9 -c 100 --npn-list=h3 `cat urls.https.config | xargs` | tail -10 > h2load.log
+	$(SSH_COMMAND) /opt/bin/h2load --warm-up-time 5 -D $(DURATION) -N 5 -t $(H2LOAD_THREADS) -n $(NUM_REQ) -m 9 -c 100 --npn-list=h3 `cat urls.https.config | xargs` | tail -10 > h2load.log
 
 #
 # Step 5 - stop loggging performance data
