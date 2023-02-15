@@ -1,14 +1,16 @@
 # Benchmarking ATS
-Some configuration scripts and a Makefile to run h2load over ATS as a benchmark.  dstat and perf will also need to be installed to capture detaile
+Some configuration scripts and a Makefile to run h2load over ATS as a benchmark.
 
 ## Assumptions
-ATS will need to be installed under `/opt/ats` and `h2load` will need be installed under `/opt/bin/h2load` with http3 support.
+ATS will need to be installed under `/opt/ats` and `h2load` will need be installed under `/opt/bin/h2load` with http3 support.  dstat and perf will also need to be installed to capture detaile.
 
 ## Benchmarking from localhost
 Running all the benchmarks for http/1.1, http/1.1 TLS, http2, and http3
+
     make 
 
 If you want to run selective benchmarks you can use a target to make
+
     make http
     make https
     make http2
@@ -18,9 +20,11 @@ If you want to run selective benchmarks you can use a target to make
 ## Changing the configuration
 
 To change the IP address for ATS
+
     CLIENT_IP=10.1.1.1 make update_client
 
 To change the response size from the default 1KB
+
     SIZE=2048 make update_size
 
 These commands will update the test URL files `urls.http.config` and `urls.https.config`
