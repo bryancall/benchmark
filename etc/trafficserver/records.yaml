@@ -1,9 +1,4 @@
 ts:
-  accept_threads: 0
-  exec_thread:
-    autoconfig: 0
-    limit: 16
-    listen: 1
   udp:
     threads: 16
   http:

@@ -21,7 +21,8 @@ ATS_DIR=/opt/ats
 NUM_REQ=100000000
 H2LOAD_THREADS=24
 DURATION=60
-#SSH_COMMAND=ssh eris
+SSH_COMMAND=ssh eris
+COMMON_OPTS=--warm-up-time 5 -D $(DURATION) -t $(H2LOAD_THREADS) -n $(NUM_REQ)
 
 test:
 	$(MAKE) http
@@ -34,8 +35,8 @@ setup:
 	$(ATS_DIR)/bin/trafficserver stop
 	#sudo systemctl stop trafficserver9
 	sudo rm -f $(ATS_DIR)/var/log/trafficserver/squid.blog*
-	#sudo systemctl start trafficserver9
 	$(ATS_DIR)/bin/trafficserver start
+	#sudo systemctl start trafficserver9
 	rm -f *.log perf.data*
 	sleep 2
 
@@ -51,27 +52,28 @@ prime_https:
 # Step 3 - start logging performance data
 log_start:
 	dstat -Nlo,total 5 >& dstat.log &
-	sudo perf record -F 1000 -a sleep 1200 &
-	sudo perf stat -p `pidof traffic_server` >& perf-stat.log &
+	sudo perf record -F 1000 -p `pidof traffic_server` -a sleep 1200 &
+	sudo perf stat-p `pidof traffic_server` >& perf-stat.log &
 	sudo perf trace -s -p `pidof traffic_server` >& perf-trace.log &
 
 # Step 4 - run the benchmark
 bench_http:
-	$(SSH_COMMAND) /opt/bin/h2load --h1 --warm-up-time 5 -D $(DURATION) -t $(H2LOAD_THREADS) -n $(NUM_REQ) -c 900 `cat urls.http.config | xargs` | tail -9 > h2load.log
+	$(SSH_COMMAND) /opt/bin/h2load --h1  $(COMMON_OPTS) -c 900 `cat urls.http.config | xargs` | tail -9 > h2load.log
 
 bench_https:
-	 $(SSH_COMMAND) /opt/bin/h2load --h1 --warm-up-time 5 -D $(DURATION) -t $(H2LOAD_THREADS) -n $(NUM_REQ) -c 900 `cat urls.https.config | xargs` | tail -9 > h2load.log
+	$(SSH_COMMAND) /opt/bin/h2load --h1 $(COMMON_OPTS) -c 900 `cat urls.https.config | xargs` | tail -9 > h2load.log
 
 bench_http2:
-	$(SSH_COMMAND) /opt/bin/h2load --warm-up-time 5 -D $(DURATION) -t $(H2LOAD_THREADS) -n $(NUM_REQ) -m 9 -c 100 `cat urls.https.config | xargs` | tail -9 > h2load.log
+	$(SSH_COMMAND) /opt/bin/h2load   $(COMMON_OPTS) -m 9 -c 100 --npn-list=h2 `cat urls.https.config | xargs` | tail -9 > h2load.log
 
 bench_http3:
-	$(SSH_COMMAND) /opt/bin/h2load --warm-up-time 5 -D $(DURATION) -N 5 -t $(H2LOAD_THREADS) -n $(NUM_REQ) -m 9 -c 100 --npn-list=h3 `cat urls.https.config | xargs` | tail -10 > h2load.log
+	$(SSH_COMMAND) /opt/bin/h2load $(COMMON_OPTS) -m 9 -c 100 --npn-list=h3 `cat urls.https.config | xargs` | tail -10 > h2load.log
 
 #
 # Step 5 - stop loggging performance data
 log_stop:
 	#killall dstat
+	echo finshed running h2load
 	ps axuw | grep dsta[t] | awk '{print $$2}' | xargs kill
 	sudo killall -s SIGINT perf
 	sudo killall -s SIGINT perf || echo "it's ok"
