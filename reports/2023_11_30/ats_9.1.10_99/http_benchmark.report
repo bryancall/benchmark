@@ -1,0 +1,896 @@
+**http2load**
+finished in 65.00s, 827236.78 req/s, 977.41MB/s
+requests: 49634207 total, 49634207 started, 49634207 done, 49634207 succeeded, 0 failed, 0 errored, 0 timeout
+status codes: 49634207 2xx, 0 3xx, 0 4xx, 0 5xx
+traffic: 57.27GB (61493132676) total, 8.41GB (9028750710) headers (space savings 0.00%), 51.30GB (55079951360) data
+                     min         max         mean         sd        +/- sd
+time for request:       97us     32.96ms      1.09ms       701us    92.53%
+time for connect:        0us         0us         0us         0us     0.00%
+time to 1st byte:        0us         0us         0us         0us     0.00%
+req/s           :     735.17     1159.15      919.13       94.26    71.33%
+
+**dstat**
+You did not select any stats, using -cdngy by default.
+----total-usage---- -dsk/total- ---net/lo-- -net/total- ---paging-- ---system--
+usr sys idl wai stl| read  writ| recv  send: recv  send|  in   out | int   csw 
+ 61  32   6   0   0|   0    46M| 341B  341B: 114M  976M|   0     0 |  12M  253k
+ 65  35   0   0   0|   0   413k| 341B  341B: 119M 1017M|   0     0 |  13M  254k
+ 65  35   0   0   0|   0   179k| 341B  341B: 118M 1003M|   0     0 |  16M  260k
+ 66  34   0   0   0|   0    97M| 341B  341B: 121M 1033M|   0     0 |  13M  262k
+ 66  34   0   0   0|   0   397M| 341B  341B: 122M 1040M|   0     0 |  12M  265k
+ 66  34   0   0   0|   0    18k| 341B  341B: 122M 1045M|   0     0 |  12M  262k
+ 66  34   0   0   0|3277B   27k| 341B  341B: 122M 1045M|   0     0 |  12M  265k
+ 66  34   0   0   0|   0   859k| 341B  341B: 123M 1046M|   0     0 |  11M  263k
+ 65  35   0   0   0|   0    95M| 341B  341B: 118M 1007M|   0     0 |  15M  256k
+ 66  34   0   0   0|   0   396M| 341B  341B: 121M 1029M|   0     0 |  13M  263k
+ 66  34   0   0   0|   0    18k| 341B  341B: 122M 1041M|   0     0 |  12M  265k
+ 66  34   0   0   0|   0   546k| 341B  341B: 122M 1042M|   0     0 |  11M  266k
+ 65  35   0   0   0|   0   103M| 341B  341B: 118M 1005M|   0     0 |  15M  257k
+**perf stat**
+perf: 'stat-p' is not a perf-command. See 'perf --help'.
+**perf report**
+# Total Lost Samples: 0
+#
+# Samples: 2M of event 'cycles:P'
+# Event count (approx.): 8082968901350
+#
+#   Overhead  Shared Object         Symbol                                              IPC   [IPC Coverage]
+# ..........  ....................  ..................................................  ....................
+#
+       4.47%  traffic_server        [.] _ZN18UnixNetVConnection21load_buffer_and_write  -      -            
+       4.32%  traffic_server        [.] _ZL13read_from_netP10NetHandlerP18UnixNetVConn  -      -            
+       2.07%  [vdso]                [.] __vdso_clock_gettime                            -      -            
+       0.95%  traffic_server        [.] _ZN12HttpTransact5StateC1Ev                     -      -            
+       0.91%  [kernel.kallsyms]     [k] nft_do_chain                                    -      -            
+       0.83%  [kernel.kallsyms]     [k] perf_tp_event                                   -      -            
+       0.76%  libtscore.so.9.1.10   [.] _ZL12freelist_newP12_InkFreeList                -      -            
+       0.74%  [kernel.kallsyms]     [k] nf_conntrack_tcp_packet                         -      -            
+       0.65%  libstdc++.so.6.0.32   [.] _ZNK10__cxxabiv121__vmi_class_type_info12__do_  -      -            
+       0.63%  [kernel.kallsyms]     [k] tcp_ack                                         -      -            
+       0.59%  [kernel.kallsyms]     [k] nft_immediate_eval                              -      -            
+       0.58%  traffic_server        [.] _ZN6HttpSM7cleanupEv                            -      -            
+       0.58%  [kernel.kallsyms]     [k] __memcpy                                        -      -            
+       0.57%  [kernel.kallsyms]     [k] _raw_spin_lock_irqsave                          -      -            
+       0.57%  [kernel.kallsyms]     [k] mlx4_en_process_rx_cq                           -      -            
+       0.55%  traffic_server        [.] _Z19mime_hdr_field_findP11MIMEHdrImplPKci       -      -            
+       0.54%  [kernel.kallsyms]     [k] net_rx_action                                   -      -            
+       0.54%  traffic_server        [.] _ZN6HttpSMC1Ev                                  -      -            
+       0.53%  traffic_server        [.] _ZN6HttpSM25setup_cache_read_transferEv         -      -            
+       0.50%  libc.so.6             [.] __memmove_avx_unaligned_erms                    -      -            
+       0.49%  [kernel.kallsyms]     [k] perf_event_output_forward                       -      -            
+       0.48%  [kernel.kallsyms]     [k] ___sys_recvmsg                                  -      -            
+       0.48%  traffic_server        [.] _ZN7CacheVC17openReadStartHeadEiP5Event         -      -            
+       0.47%  [kernel.kallsyms]     [k] native_sched_clock                              -      -            
+       0.45%  [kernel.kallsyms]     [k] tcp_recvmsg_locked                              -      -            
+       0.44%  [kernel.kallsyms]     [k] copyout                                         -      -            
+       0.43%  traffic_server        [.] _ZN6HttpSM21attach_client_sessionEP16ProxyTran  -      -            
+       0.41%  [kernel.kallsyms]     [k] _copy_from_user                                 -      -            
+       0.41%  [kernel.kallsyms]     [k] mlx4_en_xmit                                    -      -            
+       0.40%  traffic_server        [.] _ZN6HttpSM4initEb                               -      -            
+       0.40%  [kernel.kallsyms]     [k] __nf_conntrack_find_get                         -      -            
+       0.40%  traffic_server        [.] _ZN12HttpTransact39initialize_state_variables_  -      -            
+       0.40%  [kernel.kallsyms]     [k] copyin                                          -      -            
+       0.40%  traffic_server        [.] _ZN12HttpTransact26update_size_and_time_statsE  -      -            
+       0.37%  [kernel.kallsyms]     [k] iommu_v1_map_pages                              -      -            
+       0.37%  traffic_server        [.] _ZN6HttpSM17state_api_calloutEiPv               -      -            
+       0.36%  traffic_server        [.] _Z17mime_parser_parseP10MIMEParserP7HdrHeapP11  -      -            
+       0.36%  traffic_server        [.] _ZN7HdrHeap12allocate_strEi                     -      -            
+       0.36%  [kernel.kallsyms]     [k] __iommu_dma_unmap                               -      -            
+       0.35%  [kernel.kallsyms]     [k] perf_prepare_sample                             -      -            
+       0.35%  traffic_server        [.] _Z18url_CryptoHash_getPK7URLImplPN3ats10Crypto  -      -            
+       0.35%  traffic_server        [.] _ZN10HttpTunnel11kill_tunnelEv                  -      -            
+       0.35%  [kernel.kallsyms]     [k] tcp_sendmsg_locked                              -      -            
+       0.35%  traffic_server        [.] _ZN7HdrHeap13duplicate_strEPKci                 -      -            
+       0.33%  [kernel.kallsyms]     [k] native_irq_return_iret                          -      -            
+       0.33%  libc.so.6             [.] pthread_mutex_trylock@@GLIBC_2.34               -      -            
+       0.32%  [kernel.kallsyms]     [k] __tcp_transmit_skb                              -      -            
+       0.32%  [kernel.kallsyms]     [k] perf_output_begin_forward                       -      -            
+       0.32%  traffic_server        [.] _ZN11MIMEScanner3getERN2ts8TextViewES2_RbbNS_8  -      -            
+       0.32%  traffic_server        [.] _ZN5Cache9open_readEP12ContinuationPKN3ats10Cr  -      -            
+       0.31%  traffic_server        [.] _ZN10HttpTunnel12producer_runEP18HttpTunnelPro  -      -            
+       0.31%  [kernel.kallsyms]     [k] nf_conntrack_in                                 -      -            
+       0.31%  traffic_server        [.] _ZN7CacheVC12openReadMainEiP5Event              -      -            
+       0.31%  traffic_server        [.] _ZN12HttpTransact22HandleCacheOpenReadHitEPNS_  -      -            
+       0.31%  traffic_server        [.] _ZN6HttpSM9kill_thisEv                          -      -            
+       0.30%  [kernel.kallsyms]     [k] __perf_event_header__init_id                    -      -            
+       0.30%  traffic_server        [.] _ZN6HttpSM14set_next_stateEv                    -      -            
+       0.30%  traffic_server        [.] _ZN12HttpTransact26what_is_document_freshnessE  -      -            
+       0.29%  traffic_server        [.] _ZN18UnixNetVConnection10do_io_readEP12Continu  -      -            
+       0.28%  [kernel.kallsyms]     [k] skb_release_data                                -      -            
+       0.28%  traffic_server        [.] _ZN7HdrHeap12allocate_objEii                    -      -            
+       0.28%  [kernel.kallsyms]     [k] mlx4_eq_int                                     -      -            
+       0.27%  [kernel.kallsyms]     [k] ___sys_sendmsg                                  -      -            
+       0.27%  traffic_server        [.] _ZN12HttpTransact13HandleRequestEPNS_5StateE    -      -            
+       0.27%  traffic_server        [.] _ZN11RamCacheLRU3getEPN3ats10CryptoHashEP3PtrI  -      -            
+       0.27%  traffic_server        [.] _Z12free_CacheVCP7CacheVC                       -      -            
+       0.27%  [kernel.kallsyms]     [k] strncpy                                         -      -            
+       0.27%  traffic_server        [.] _Z14mime_hdr_printP7HdrHeapP11MIMEHdrImplPciPi  -      -            
+       0.27%  traffic_server        [.] _ZN6HttpSM12main_handlerEiPv                    -      -            
+       0.27%  [kernel.kallsyms]     [k] __rcu_read_unlock                               -      -            
+       0.26%  traffic_server        [.] _ZN9LogBuffer14checkout_writeEPmm               -      -            
+       0.26%  [kernel.kallsyms]     [k] __put_user_nocheck_4                            -      -            
+       0.26%  traffic_server        [.] _ZN6HttpSM32state_read_client_request_headerEi  -      -            
+       0.26%  [kernel.kallsyms]     [k] __dev_queue_xmit                                -      -            
+       0.26%  traffic_server        [.] _ZN12_GLOBAL__N_119escapify_url_commonEP5Arena  -      -            
+       0.26%  [kernel.kallsyms]     [k] __wake_up_common_lock                           -      -            
+       0.26%  traffic_server        [.] _Z17hdrtoken_tokenizePKciPS0_                   -      -            
+       0.25%  traffic_server        [.] _ZN7CacheVCC2Ev                                 -      -            
+       0.25%  [kernel.kallsyms]     [k] ep_poll_callback                                -      -            
+       0.25%  [kernel.kallsyms]     [k] ip_finish_output2                               -      -            
+       0.25%  [kernel.kallsyms]     [k] try_charge_memcg                                -      -            
+       0.25%  [kernel.kallsyms]     [k] __iommu_map                                     -      -            
+       0.25%  libtscore.so.9.1.10   [.] _ZL13freelist_freeP12_InkFreeListPv             -      -            
+       0.25%  traffic_server        [.] _ZN7HdrHeap7destroyEv                           -      -            
+       0.25%  traffic_server        [.] _ZN18UnixNetVConnection8reenableEP3VIO          -      -            
+       0.24%  traffic_server        [.] _ZN14RemapProcessor15setup_for_remapEPN12HttpT  -      -            
+       0.24%  [kernel.kallsyms]     [k] read_tsc                                        -      -            
+       0.24%  [kernel.kallsyms]     [k] __siphash_unaligned                             -      -            
+       0.23%  [kernel.kallsyms]     [k] __slab_free                                     -      -            
+       0.23%  traffic_server        [.] _ZN12HttpTransact18client_result_statEPNS_5Sta  -      -            
+       0.23%  [kernel.kallsyms]     [k] __skb_datagram_iter                             -      -            
+       0.23%  traffic_server        [.] _Z15write_to_net_ioP10NetHandlerP18UnixNetVCon  -      -            
+       0.23%  [kernel.kallsyms]     [k] copy_iovec_from_user                            -      -            
+       0.23%  [kernel.kallsyms]     [k] __task_pid_nr_ns                                -      -            
+       0.22%  [kernel.kallsyms]     [k] perf_trace_sys_enter                            -      -            
+       0.22%  traffic_server        [.] _ZN9MIOBuffer21append_block_internalEP13IOBuff  -      -            
+       0.22%  [kernel.kallsyms]     [k] __netif_receive_skb_core.constprop.0            -      -            
+       0.22%  traffic_server        [.] _Z9dir_probePKN3ats10CryptoHashEP3VolP3DirPS6_  -      -            
+       0.22%  [kernel.kallsyms]     [k] sched_clock                                     -      -            
+       0.22%  traffic_server        [.] _ZN12HttpTransact15EndRemapRequestEPNS_5StateE  -      -            
+       0.22%  [kernel.kallsyms]     [k] tcp_data_queue                                  -      -            
+       0.22%  traffic_server        [.] _ZL23write_signal_and_updateiP18UnixNetVConnec  -      -            
+       0.22%  traffic_server        [.] _ZN10HttpTunnel12main_handlerEiPv               -      -            
+       0.22%  [kernel.kallsyms]     [k] iommu_map                                       -      -            
+       0.21%  traffic_server        [.] _ZN10HttpTunnelC1Ev                             -      -            
+       0.21%  traffic_server        [.] _Z14mime_mem_printPKciPciPiS2_                  -      -            
+       0.21%  [kernel.kallsyms]     [k] __rcu_read_lock                                 -      -            
+       0.21%  traffic_server        [.] _ZN12MutexTryLockD2Ev                           -      -            
+       0.21%  [kernel.kallsyms]     [k] __perf_event_overflow                           -      -            
+       0.21%  traffic_server        [.] _ZN18UnixNetVConnection11do_io_writeEP12Contin  -      -            
+       0.21%  [kernel.kallsyms]     [k] fetch_pte                                       -      -            
+       0.21%  [kernel.kallsyms]     [k] mlx4_en_process_tx_cq                           -      -            
+       0.21%  [kernel.kallsyms]     [k] tcp_recvmsg                                     -      -            
+       0.21%  [kernel.kallsyms]     [k] syscall_trace_enter.isra.0                      -      -            
+       0.20%  [kernel.kallsyms]     [k] ____sys_recvmsg                                 -      -            
+       0.20%  traffic_server        [.] _ZL22read_signal_and_updateiP18UnixNetVConnect  -      -            
+       0.20%  [kernel.kallsyms]     [k] fast_mix                                        -      -            
+       0.20%  traffic_server        [.] _ZN10NetHandler18process_ready_listEv           -      -            
+       0.20%  [kernel.kallsyms]     [k] __check_object_size                             -      -            
+       0.19%  traffic_server        [.] _Z21mime_hdr_field_attachP11MIMEHdrImplP9MIMEF  -      -            
+       0.19%  libc.so.6             [.] __GI___pthread_mutex_unlock_usercnt             -      -            
+       0.19%  traffic_server        [.] _ZN12HttpTransact17StartRemapRequestEPNS_5Stat  -      -            
+       0.19%  [kernel.kallsyms]     [k] __mod_timer                                     -      -            
+       0.19%  [kernel.kallsyms]     [k] kmem_cache_alloc_node                           -      -            
+       0.19%  libc.so.6             [.] __strcmp_avx2                                   -      -            
+       0.19%  [kernel.kallsyms]     [k] __irq_exit_rcu                                  -      -            
+       0.19%  [kernel.kallsyms]     [k] tcp_write_xmit                                  -      -            
+       0.18%  [kernel.kallsyms]     [k] tcp_rcv_established                             -      -            
+       0.18%  libc.so.6             [.] __libc_recvmsg                                  -      -            
+       0.18%  libc.so.6             [.] __memchr_avx2                                   -      -            
+       0.18%  [kernel.kallsyms]     [k] __copy_skb_header                               -      -            
+       0.18%  traffic_server        [.] _ZN13HttpHookState7getNextEv                    -      -            
+       0.18%  [kernel.kallsyms]     [k] __fget_light                                    -      -            
+       0.18%  traffic_server        [.] _ZN7HdrHeap20inherit_string_heapsEPKS_          -      -            
+       0.18%  [kernel.kallsyms]     [k] avc_has_perm_noaudit                            -      -            
+       0.18%  traffic_server        [.] _ZN6HttpSM32call_transact_and_set_next_stateEP  -      -            
+       0.17%  [kernel.kallsyms]     [k] perf_trace_run_bpf_submit                       -      -            
+       0.17%  traffic_server        [.] _ZN12HttpTransact31HandleCacheOpenReadHitFresh  -      -            
+       0.17%  traffic_server        [.] _ZN17HttpTransactCache26calculate_quality_of_m  -      -            
+**perf trace**
+
+ Summary of events:
+
+ [TS_MAIN] (3675332), 130 events, 0.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   clock_nanosleep       65      0 64004.398     0.000   984.683  1000.103      1.56%
+
+
+ traffic_server (3675335), 130 events, 0.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   poll                  65      0 64063.306     0.000   985.589  1001.040      1.56%
+
+
+ [ET_NET 0] (3675336), 3020329 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           486886      0 10505.027     0.003     0.022   152.180      7.63%
+   recvmsg           988257 488751  7626.241     0.001     0.008   150.481      8.77%
+   epoll_wait         21274      0  1142.854     0.000     0.054   114.403     25.49%
+   sched_yield         6440      0   764.039     0.001     0.119   136.214     33.92%
+   write               7250      0    44.317     0.002     0.006     0.086      0.77%
+   mprotect               5      0     0.136     0.014     0.027     0.041     16.63%
+   madvise                2      0     0.100     0.013     0.050     0.087     73.95%
+   epoll_ctl             18      0     0.082     0.003     0.005     0.006      4.79%
+   read                  18      0     0.054     0.002     0.003     0.005      6.49%
+   getsockname           18      0     0.043     0.001     0.002     0.004      6.40%
+
+
+ [ET_NET 1] (3675337), 2981225 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           480751      0  9884.168     0.003     0.021   173.588      7.08%
+   recvmsg           974804 481960  8123.208     0.001     0.008   134.801      8.15%
+   sched_yield         6212      0  1509.736     0.001     0.243   142.912     20.66%
+   epoll_wait         21492      0   653.461     0.000     0.030   119.165     30.11%
+   write               7254      0   120.634     0.002     0.017    71.868     59.57%
+   mprotect               5      0     0.129     0.008     0.026     0.058     37.86%
+   madvise                2      0     0.129     0.014     0.064     0.114     77.75%
+   read                  34      0     0.118     0.002     0.003     0.025     23.10%
+   epoll_ctl             28      0     0.108     0.002     0.004     0.006      4.97%
+   getsockname           28      0     0.058     0.001     0.002     0.003      5.02%
+
+
+ [ET_NET 2] (3675338), 3071505 events, 3.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           495117      0 10408.586     0.003     0.021   136.508      7.95%
+   recvmsg          1003468 496340  5658.070     0.001     0.006   180.243     10.41%
+   sched_yield         6558      0  1852.584     0.001     0.282   136.919     17.79%
+   epoll_wait         22841      0   998.528     0.000     0.044   120.957     29.56%
+   write               7677      0   175.942     0.002     0.023    92.952     57.96%
+   mprotect              11      0     0.255     0.005     0.023     0.058     23.60%
+   epoll_ctl             28      0     0.190     0.002     0.007     0.027     19.49%
+   getsockname           28      0     0.095     0.001     0.003     0.023     25.58%
+   read                  21      0     0.082     0.002     0.004     0.017     20.29%
+
+
+ [ET_NET 3] (3675339), 3028488 events, 3.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           488456      0 11072.337     0.003     0.023   140.016      7.49%
+   recvmsg           989504 489222  6412.085     0.001     0.006   140.469      9.52%
+   sched_yield         6656      0  2064.942     0.001     0.310   151.247     17.66%
+   epoll_wait         22164      0   769.295     0.000     0.035   117.048     31.52%
+   write               7392      0    41.931     0.002     0.006     0.048      0.70%
+   epoll_ctl             28      0     0.178     0.002     0.006     0.048     27.47%
+   mprotect               4      0     0.151     0.015     0.038     0.063     27.67%
+   madvise                1      0     0.117     0.117     0.117     0.117      0.00%
+   getsockname           28      0     0.090     0.001     0.003     0.019     23.39%
+   read                  21      0     0.076     0.002     0.004     0.013     17.43%
+   getrusage              1      0     0.008     0.008     0.008     0.008      0.00%
+
+
+ [ET_NET 4] (3675340), 3024312 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           487266      0 10956.694     0.003     0.022   145.902      7.63%
+   recvmsg           988566 488850  7417.400     0.001     0.008   135.579      8.84%
+   sched_yield         6520      0  2493.942     0.001     0.383   121.535     12.68%
+   epoll_wait         22194      0   905.640     0.000     0.041    96.130     26.75%
+   write               7552      0    43.955     0.002     0.006     0.048      0.69%
+   read                  25      0     0.160     0.002     0.006     0.098     59.50%
+   epoll_ctl             25      0     0.108     0.003     0.004     0.009      6.14%
+   getsockname           25      0     0.054     0.001     0.002     0.003      5.72%
+   mprotect               1      0     0.016     0.016     0.016     0.016      0.00%
+
+
+ [ET_NET 5] (3675341), 3026747 events, 3.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           488121      0 10718.456     0.003     0.022   172.153      7.58%
+   recvmsg           989126 489168  7378.409     0.001     0.007   150.138      9.11%
+   sched_yield         6570      0  1921.859     0.001     0.293   120.814     16.96%
+   epoll_wait         22051      0   669.185     0.000     0.030   109.495     29.91%
+   write               7423      0   185.803     0.001     0.025   114.947     63.40%
+   epoll_ctl             28      0     0.159     0.002     0.006     0.024     17.72%
+   mprotect               7      0     0.156     0.011     0.022     0.057     27.31%
+   getsockname           28      0     0.110     0.001     0.004     0.027     27.21%
+   read                  22      0     0.100     0.002     0.005     0.031     31.74%
+   madvise                1      0     0.091     0.091     0.091     0.091      0.00%
+
+
+ [ET_NET 6] (3675342), 3000510 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           483724      0  9121.261     0.003     0.019   150.866      7.98%
+   recvmsg           980438 484743  6345.047     0.001     0.006   135.067      9.28%
+   sched_yield         6582      0  3300.089     0.001     0.501   127.596     12.06%
+   epoll_wait         21741      0   655.236     0.000     0.030   106.254     30.85%
+   write               7679      0   166.137     0.002     0.022    90.072     56.86%
+   epoll_ctl             28      0     0.110     0.003     0.004     0.006      4.66%
+   read                  28      0     0.070     0.001     0.002     0.004      5.00%
+   getsockname           28      0     0.059     0.001     0.002     0.003      5.00%
+   mprotect               1      0     0.023     0.023     0.023     0.023      0.00%
+
+
+ [ET_NET 7] (3675343), 2991887 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           482543      0 10404.872     0.003     0.022   146.708      7.24%
+   recvmsg           978285 483739  7056.646     0.001     0.007   137.807      8.56%
+   sched_yield         6289      0  1969.775     0.001     0.313   152.879     18.80%
+   epoll_wait         21483      0   705.133     0.000     0.033    99.216     29.10%
+   write               7202      0    48.436     0.002     0.007     0.067      0.88%
+   read                  21      0     0.353     0.001     0.017     0.251     70.10%
+   epoll_ctl             56      0     0.238     0.001     0.004     0.029     16.48%
+   getsockname           28      0     0.113     0.001     0.004     0.020     22.58%
+   mprotect               2      0     0.036     0.014     0.018     0.023     25.14%
+   close                 28      0     0.035     0.001     0.001     0.002      3.28%
+   getsockopt            15      0     0.020     0.001     0.001     0.002      4.41%
+   madvise                1      0     0.012     0.012     0.012     0.012      0.00%
+   shutdown               5      0     0.007     0.001     0.001     0.002      4.02%
+
+
+ [ET_NET 8] (3675344), 3021876 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           487454      0 10410.423     0.003     0.021   120.762      7.51%
+   recvmsg           987629 488210  6716.011     0.001     0.007   124.850      8.99%
+   sched_yield         6294      0  2358.490     0.001     0.375   131.504     15.31%
+   epoll_wait         21930      0   625.003     0.000     0.028   100.965     29.24%
+   write               7551      0    45.351     0.002     0.006     0.059      0.77%
+   mprotect               4      0     0.147     0.013     0.037     0.108     64.74%
+   epoll_ctl             28      0     0.147     0.002     0.005     0.016     11.97%
+   getsockname           28      0     0.099     0.001     0.004     0.028     28.75%
+   read                  22      0     0.077     0.002     0.003     0.009     11.33%
+
+
+ [ET_NET 9] (3675345), 3030422 events, 3.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           488715      0 10530.737     0.003     0.022   139.989      7.73%
+   recvmsg           990548 489904  7396.920     0.001     0.007   157.760      9.34%
+   sched_yield         6295      0  2602.897     0.001     0.413   126.482     16.62%
+   epoll_wait         22187      0   746.025     0.000     0.034   109.767     28.54%
+   write               7388      0    96.361     0.002     0.013    25.095     36.76%
+   epoll_ctl             28      0     0.110     0.002     0.004     0.006      4.88%
+   read                  27      0     0.070     0.002     0.003     0.004      4.70%
+   mprotect               3      0     0.061     0.011     0.020     0.035     37.10%
+   getsockname           28      0     0.058     0.001     0.002     0.003      4.34%
+
+
+ [ET_NET 10] (3675346), 3057315 events, 3.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           493118      0  9721.496     0.003     0.020   163.424      8.22%
+   recvmsg           998902 494084  6879.150     0.001     0.007   156.142      9.72%
+   sched_yield         6444      0  2579.978     0.001     0.400   114.929     13.68%
+   epoll_wait         22632      0   809.974     0.000     0.036   124.620     27.42%
+   write               7481      0   290.412     0.002     0.039   112.421     52.87%
+   epoll_ctl             28      0     0.118     0.003     0.004     0.006      4.44%
+   mprotect               6      0     0.110     0.008     0.018     0.042     28.56%
+   madvise                1      0     0.071     0.071     0.071     0.071      0.00%
+   read                  27      0     0.069     0.002     0.003     0.004      5.05%
+   getsockname           28      0     0.059     0.001     0.002     0.003      4.64%
+
+
+ [ET_NET 11] (3675347), 3022822 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           487444      0 10408.373     0.003     0.021   177.048      7.71%
+   recvmsg           988081 488661  6253.133     0.001     0.006   134.361      9.03%
+   sched_yield         6457      0  2048.992     0.001     0.317   123.606     18.47%
+   epoll_wait         21952      0   947.276     0.000     0.043   111.605     27.11%
+   write               7387      0   155.047     0.002     0.021   109.252     70.46%
+   getsockname           28      0     0.249     0.001     0.009     0.112     49.40%
+   epoll_ctl             28      0     0.127     0.002     0.005     0.018     14.60%
+   mprotect               4      0     0.115     0.010     0.029     0.049     31.76%
+   madvise                1      0     0.092     0.092     0.092     0.092      0.00%
+   read                  22      0     0.083     0.002     0.004     0.014     18.07%
+
+
+ [ET_NET 12] (3675348), 3016945 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           486339      0 10150.587     0.003     0.021   155.502      7.48%
+   recvmsg           986721 487913  7979.505     0.001     0.008   151.355      8.77%
+   sched_yield         6100      0  1229.628     0.001     0.202   120.771     21.94%
+   epoll_wait         21957      0   791.188     0.000     0.036   111.507     26.55%
+   write               7285      0    44.119     0.002     0.006     0.077      0.82%
+   epoll_ctl             28      0     0.114     0.002     0.004     0.013      9.85%
+   getsockname           28      0     0.058     0.001     0.002     0.003      5.50%
+   read                  25      0     0.057     0.001     0.002     0.004      6.26%
+
+
+ [ET_NET 13] (3675349), 2999689 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           483696      0 10699.178     0.003     0.022   147.333      7.35%
+   recvmsg           980891 485073  6124.686     0.001     0.006   150.552      8.64%
+   sched_yield         6245      0  1317.141     0.001     0.211   110.238     16.82%
+   epoll_wait         21555      0   784.610     0.000     0.036   110.685     27.72%
+   write               7378      0    48.032     0.002     0.007     0.069      0.83%
+   epoll_ctl             28      0     0.136     0.002     0.005     0.020     15.49%
+   mprotect               3      0     0.098     0.013     0.033     0.054     36.15%
+   getsockname           28      0     0.072     0.001     0.003     0.011     13.21%
+   read                  21      0     0.072     0.001     0.003     0.009     12.38%
+
+
+ [ET_NET 14] (3675350), 3049858 events, 3.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           491782      0 11291.060     0.003     0.023   156.814      7.55%
+   recvmsg           996582 492625  6035.884     0.001     0.006   151.827      9.31%
+   sched_yield         6439      0  2395.615     0.001     0.372   141.721     17.17%
+   epoll_wait         22423      0  1056.599     0.000     0.047    98.769     24.63%
+   write               7572      0   254.662     0.002     0.034   116.516     58.75%
+   epoll_ctl             56      0     0.178     0.001     0.003     0.009      6.31%
+   mprotect               7      0     0.164     0.007     0.023     0.067     36.84%
+   read                  28      0     0.072     0.002     0.003     0.004      5.07%
+   getsockname           28      0     0.068     0.001     0.002     0.012     15.45%
+   close                 27      0     0.049     0.001     0.002     0.013     24.89%
+   getsockopt             1      0     0.002     0.002     0.002     0.002      0.00%
+   shutdown               1      0     0.001     0.001     0.001     0.001      0.00%
+
+
+ [ET_NET 15] (3675351), 3037300 events, 3.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           489724      0 10528.794     0.003     0.021   156.643      7.60%
+   recvmsg           992593 490982  7125.084     0.001     0.007   123.565      8.80%
+   sched_yield         6625      0  2004.893     0.001     0.303   112.044     15.96%
+   epoll_wait         22247      0   643.077     0.000     0.029    93.040     28.05%
+   write               7401      0   128.059     0.002     0.017    42.521     46.81%
+   epoll_ctl             28      0     0.199     0.002     0.007     0.033     21.47%
+   getsockname           28      0     0.128     0.001     0.005     0.018     20.47%
+   mprotect               4      0     0.104     0.010     0.026     0.044     27.08%
+   read                  22      0     0.073     0.001     0.003     0.018     22.20%
+
+
+ [ET_NET 16] (3675352), 2993334 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           482918      0  9995.242     0.003     0.021   130.498      7.10%
+   recvmsg           978718 483904  7415.346     0.001     0.008   162.795      8.27%
+   sched_yield         6158      0  1940.029     0.001     0.315   129.199     17.79%
+   epoll_wait         21493      0   872.565     0.000     0.041   113.259     26.84%
+   write               7267      0   205.202     0.002     0.028   114.455     59.29%
+   epoll_ctl             46      0     0.134     0.001     0.003     0.007      7.09%
+   mprotect               5      0     0.101     0.009     0.020     0.036     27.77%
+   getsockopt             6      0     0.070     0.001     0.012     0.062     86.46%
+   read                  17      0     0.046     0.002     0.003     0.004      6.22%
+   getsockname           18      0     0.040     0.001     0.002     0.003      6.20%
+   close                 28      0     0.038     0.001     0.001     0.004      7.00%
+   madvise                1      0     0.016     0.016     0.016     0.016      0.00%
+   shutdown               3      0     0.005     0.001     0.002     0.002      9.38%
+
+
+ [ET_NET 17] (3675353), 2993573 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           482550      0 10589.292     0.003     0.022   201.040      7.21%
+   recvmsg           978802 483908  7809.399     0.001     0.008   149.123      8.50%
+   sched_yield         6439      0  1733.315     0.001     0.269   114.040     18.31%
+   epoll_wait         21459      0   845.468     0.000     0.039    91.445     24.95%
+   write               7465      0   270.210     0.002     0.036   115.761     57.62%
+   epoll_ctl             28      0     0.213     0.002     0.008     0.055     25.80%
+   mprotect               4      0     0.134     0.007     0.033     0.073     45.44%
+   getsockname           28      0     0.101     0.001     0.004     0.020     23.42%
+   read                  24      0     0.065     0.001     0.003     0.007      8.65%
+
+
+ [ET_NET 18] (3675354), 3014103 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           486011      0 10986.875     0.003     0.023   149.364      7.60%
+   recvmsg           985375 487127  6710.770     0.001     0.007   172.188      9.10%
+   sched_yield         6266      0  2123.503     0.001     0.339   134.870     14.52%
+   epoll_wait         21961      0   812.346     0.000     0.037   101.642     26.02%
+   write               7317      0   276.707     0.002     0.038   121.571     53.96%
+   mprotect               4      0     5.464     0.021     1.366     5.380     97.96%
+   epoll_ctl             56      0     0.323     0.001     0.006     0.090     28.20%
+   getsockname           28      0     0.089     0.001     0.003     0.018     19.85%
+   close                 28      0     0.049     0.001     0.002     0.007     13.82%
+   read                  14      0     0.045     0.002     0.003     0.007     12.80%
+   futex                  1      0     0.029     0.029     0.029     0.029      0.00%
+   getsockopt             2      0     0.003     0.001     0.002     0.002     14.74%
+   shutdown               1      0     0.002     0.002     0.002     0.002      0.00%
+
+
+ [ET_NET 19] (3675355), 3029727 events, 3.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           488425      0 10520.871     0.003     0.022   183.578      7.70%
+   recvmsg           991015 489926  7285.023     0.001     0.007   127.459      9.00%
+   sched_yield         6071      0  1278.457     0.001     0.211   121.826     21.10%
+   epoll_wait         21985      0   449.333     0.000     0.020    60.078     28.45%
+   write               7226      0   156.219     0.002     0.022   110.767     70.90%
+   mprotect               5      0     0.288     0.007     0.058     0.088     25.53%
+   epoll_ctl             56      0     0.183     0.001     0.003     0.017     10.96%
+   madvise                1      0     0.097     0.097     0.097     0.097      0.00%
+   getsockname           28      0     0.077     0.001     0.003     0.021     25.44%
+   read                  22      0     0.072     0.001     0.003     0.019     24.12%
+   close                 28      0     0.036     0.001     0.001     0.002      2.98%
+   getsockopt             2      0     0.004     0.002     0.002     0.002      2.35%
+
+
+ [ET_NET 20] (3675356), 3003803 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           484371      0  9847.703     0.003     0.020   144.483      7.32%
+   recvmsg           982151 485423  7152.572     0.001     0.007   188.327      8.64%
+   sched_yield         6324      0  2467.412     0.001     0.390   113.320     14.84%
+   epoll_wait         21688      0   882.312     0.000     0.041   149.904     29.14%
+   write               7195      0    89.528     0.001     0.012    42.743     47.74%
+   epoll_ctl             56      0     0.229     0.001     0.004     0.026     15.93%
+   read                  22      0     0.183     0.002     0.008     0.099     53.21%
+   mprotect               5      0     0.160     0.014     0.032     0.058     30.22%
+   getsockname           28      0     0.128     0.001     0.005     0.020     24.28%
+   madvise                1      0     0.102     0.102     0.102     0.102      0.00%
+   close                 28      0     0.031     0.001     0.001     0.002      3.53%
+   shutdown              18      0     0.026     0.001     0.001     0.002      2.66%
+   getsockopt            17      0     0.023     0.001     0.001     0.002      2.43%
+
+
+ [ET_NET 21] (3675357), 3056473 events, 3.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           492747      0 10964.990     0.002     0.022   150.712      7.73%
+   recvmsg           999098 493996  6956.984     0.001     0.007   117.667      8.85%
+   sched_yield         6336      0  1757.564     0.001     0.277   133.930     20.24%
+   epoll_wait         22539      0   962.188     0.000     0.043   137.094     27.66%
+   write               7405      0   154.173     0.002     0.021   112.325     72.85%
+   epoll_ctl             56      0     0.151     0.001     0.003     0.009      6.18%
+   getsockname           28      0     0.051     0.001     0.002     0.003      4.80%
+   close                 28      0     0.045     0.001     0.002     0.010     18.82%
+   read                  17      0     0.037     0.001     0.002     0.003      5.64%
+   mprotect               2      0     0.016     0.007     0.008     0.009     12.87%
+
+
+ [ET_NET 22] (3675358), 3016952 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           486601      0 10537.905     0.003     0.022   143.483      7.46%
+   recvmsg           986132 487484  6811.080     0.001     0.007   150.568      8.77%
+   sched_yield         6237      0  2090.865     0.001     0.335   134.096     14.55%
+   epoll_wait         22010      0   849.752     0.000     0.039   113.116     28.30%
+   write               7358      0   162.326     0.002     0.022   117.027     72.09%
+   epoll_ctl             56      0     0.187     0.001     0.003     0.017     10.98%
+   read                  24      0     0.061     0.002     0.003     0.008     10.87%
+   getsockname           28      0     0.053     0.001     0.002     0.003      4.23%
+   mprotect               4      0     0.046     0.007     0.011     0.020     24.65%
+   close                 28      0     0.044     0.001     0.002     0.006     11.87%
+   getsockopt             6      0     0.009     0.001     0.001     0.002      6.98%
+
+
+ [ET_NET 23] (3675359), 3015661 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           486195      0 10771.416     0.003     0.022   171.004      7.37%
+   recvmsg           985551 487386  6737.591     0.001     0.007   130.741      8.99%
+   sched_yield         6412      0  1469.750     0.001     0.229   112.003     15.59%
+   epoll_wait         21937      0   656.726     0.000     0.030    94.993     26.93%
+   write               7652      0   227.144     0.002     0.030   108.589     52.96%
+   epoll_ctl             41      0     0.150     0.001     0.004     0.027     18.01%
+   read                  13      0     0.043     0.002     0.003     0.006      6.54%
+   close                 28      0     0.040     0.001     0.001     0.005      8.63%
+   getsockname           13      0     0.034     0.002     0.003     0.003      4.66%
+   shutdown               2      0     0.004     0.002     0.002     0.002      4.58%
+   getsockopt             1      0     0.002     0.002     0.002     0.002      0.00%
+
+
+ [ET_NET 24] (3675360), 3020486 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           486887      0 12113.446     0.002     0.025   141.318      7.36%
+   recvmsg           987289 487966  7044.291     0.001     0.007   192.110      9.00%
+   sched_yield         6448      0  1938.665     0.001     0.301   125.213     16.13%
+   epoll_wait         21976      0   729.013     0.000     0.033   124.045     28.44%
+   write               7508      0   229.514     0.002     0.031    99.691     56.35%
+   madvise                1      0     5.317     5.317     5.317     5.317      0.00%
+   epoll_ctl             56      0     0.155     0.001     0.003     0.008      6.87%
+   getsockname           28      0     0.109     0.001     0.004     0.045     40.22%
+   mprotect               2      0     0.090     0.008     0.045     0.082     82.18%
+   read                  24      0     0.059     0.002     0.002     0.004      5.82%
+   futex                 12      0     0.053     0.003     0.004     0.007     10.88%
+   close                 28      0     0.035     0.001     0.001     0.002      2.93%
+
+
+ [ET_NET 25] (3675361), 2978602 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           480498      0 10611.374     0.003     0.022   147.086      7.16%
+   recvmsg           973956 481798  6674.237     0.001     0.007   169.503      8.53%
+   sched_yield         6149      0  2341.693     0.001     0.381   118.479     13.70%
+   epoll_wait         21381      0   481.587     0.000     0.023    60.335     26.25%
+   write               7201      0   224.058     0.002     0.031    90.749     55.40%
+   epoll_ctl             46      0     0.133     0.001     0.003     0.008      7.74%
+   read                  18      0     0.051     0.001     0.003     0.004      5.95%
+   getsockname           18      0     0.042     0.001     0.002     0.003      6.04%
+   close                 28      0     0.036     0.001     0.001     0.002      3.61%
+   mprotect               1      0     0.014     0.014     0.014     0.014      0.00%
+   madvise                1      0     0.012     0.012     0.012     0.012      0.00%
+   getsockopt             6      0     0.009     0.001     0.002     0.002      6.78%
+   shutdown               1      0     0.002     0.002     0.002     0.002      0.00%
+
+
+ [ET_NET 26] (3675362), 2990602 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           482125      0  9937.155     0.003     0.021   152.549      7.38%
+   recvmsg           977724 483513  8096.951     0.001     0.008   152.827      8.73%
+   sched_yield         6311      0  3784.004     0.001     0.600   193.948     12.39%
+   epoll_wait         21658      0   558.609     0.000     0.026    97.096     28.70%
+   write               7371      0    48.661     0.002     0.007     1.046      2.29%
+   epoll_ctl             56      0     0.210     0.001     0.004     0.020     11.83%
+   getsockname           28      0     0.115     0.001     0.004     0.035     31.91%
+   mprotect               2      0     0.055     0.017     0.028     0.039     38.99%
+   close                 28      0     0.039     0.001     0.001     0.003      5.69%
+   read                  10      0     0.026     0.002     0.003     0.004     11.00%
+   getsockopt             6      0     0.010     0.002     0.002     0.002      3.20%
+   shutdown               1      0     0.002     0.002     0.002     0.002      0.00%
+
+
+ [ET_NET 27] (3675363), 3000060 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           483833      0 11365.483     0.003     0.023   131.069      7.30%
+   recvmsg           980719 484883  6733.654     0.001     0.007   152.442      8.92%
+   sched_yield         6305      0  1658.554     0.001     0.263   114.929     18.38%
+   epoll_wait         21573      0   621.187     0.000     0.029   115.992     29.09%
+   write               7499      0   263.773     0.002     0.035   100.560     47.38%
+   getsockname           28      0     0.173     0.001     0.006     0.073     41.73%
+   epoll_ctl             42      0     0.169     0.001     0.004     0.020     13.43%
+   mprotect               5      0     0.160     0.007     0.032     0.076     37.81%
+   madvise                1      0     0.129     0.129     0.129     0.129      0.00%
+   read                  22      0     0.067     0.002     0.003     0.008     11.78%
+   close                 14      0     0.025     0.001     0.002     0.007     26.08%
+
+
+ [ET_NET 28] (3675364), 2971499 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           479273      0 11201.218     0.003     0.023   122.193      7.06%
+   recvmsg           971483 480527  7252.166     0.001     0.007   164.165      8.61%
+   sched_yield         6363      0  1493.498     0.001     0.235   100.112     16.76%
+   epoll_wait         21299      0   737.482     0.000     0.035   153.434     32.13%
+   write               7284      0   152.562     0.002     0.021   101.422     66.48%
+   epoll_ctl             17      0     0.068     0.002     0.004     0.005      5.50%
+   read                  17      0     0.044     0.002     0.003     0.003      3.51%
+   getsockname           17      0     0.039     0.001     0.002     0.003      5.11%
+   mprotect               2      0     0.036     0.013     0.018     0.024     29.71%
+   madvise                1      0     0.015     0.015     0.015     0.015      0.00%
+
+
+ [ET_NET 29] (3675365), 2977334 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           480109      0 10067.244     0.002     0.021   117.272      6.69%
+   recvmsg           974482 482058  7850.299     0.001     0.008   115.791      8.30%
+   sched_yield         6246      0   977.078     0.001     0.156   105.251     22.49%
+   epoll_wait         20522      0   641.959     0.000     0.031   136.012     31.51%
+   write               7232      0    70.185     0.002     0.010    18.064     25.74%
+   epoll_ctl             27      0     0.195     0.002     0.007     0.032     19.54%
+   mprotect               5      0     0.110     0.012     0.022     0.055     37.85%
+   read                  24      0     0.081     0.002     0.003     0.011     13.45%
+   getsockname           27      0     0.079     0.001     0.003     0.010     14.54%
+
+
+ [ET_NET 30] (3675366), 3009935 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           485487      0 10681.848     0.003     0.022   181.118      7.64%
+   recvmsg           984523 486916  8077.507     0.001     0.008   170.205      8.73%
+   sched_yield         6423      0  1579.986     0.001     0.246   111.602     15.70%
+   epoll_wait         21110      0   629.482     0.000     0.030   120.654     31.82%
+   write               7370      0   156.852     0.002     0.021   108.527     69.19%
+   epoll_ctl             20      0     0.100     0.002     0.005     0.016     13.73%
+   madvise                1      0     0.077     0.077     0.077     0.077      0.00%
+   mprotect               4      0     0.060     0.012     0.015     0.022     16.33%
+   read                  19      0     0.054     0.002     0.003     0.004      5.29%
+   getsockname           20      0     0.048     0.001     0.002     0.003      5.96%
+
+
+ [ET_NET 31] (3675367), 2967722 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   sendmsg           478840      0 10964.633     0.003     0.023   151.804      6.94%
+   recvmsg           971147 480222  6687.799     0.001     0.007   166.516      8.44%
+   sched_yield         6248      0  1286.844     0.001     0.206   110.854     18.61%
+   epoll_wait         20480      0   788.732     0.000     0.039   124.005     27.63%
+   write               7115      0    77.467     0.002     0.011    26.150     33.75%
+   epoll_ctl             14      0     0.066     0.002     0.005     0.006      6.09%
+   read                  14      0     0.038     0.001     0.003     0.004      6.71%
+   mprotect               3      0     0.034     0.009     0.011     0.014     12.42%
+   getsockname           14      0     0.033     0.001     0.002     0.003      6.39%
+
+
+ [ET_TASK 0] (3675368), 4468 events, 0.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   futex               2234   1117 65154.459     0.000    29.165    60.512      2.17%
+
+
+ [ET_TASK 1] (3675369), 4554 events, 0.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   futex               2210   1105 65174.289     0.000    29.491    61.188      2.16%
+   openat                13      0     1.283     0.074     0.099     0.145      6.04%
+   pwrite64              13      0     0.680     0.027     0.052     0.205     24.67%
+   write                 13      0     0.139     0.006     0.011     0.026     13.21%
+   fcntl                 13      0     0.048     0.002     0.004     0.012     25.93%
+   close                 13      0     0.044     0.002     0.003     0.015     31.17%
+   mmap                   1      0     0.023     0.023     0.023     0.023      0.00%
+   mprotect               1      0     0.017     0.017     0.017     0.017      0.00%
+
+
+ [LOG_PREPROC 0] (3675370), 2927748 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   epoll_wait        487995      0 57810.022     0.000     0.118   145.557      2.29%
+   write             487994      0  2251.911     0.001     0.005    86.111      8.75%
+   read              487898      0  1291.940     0.001     0.003    78.989     12.45%
+
+
+ [LOG_FLUSH] (3675371), 2925895 events, 2.9%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   epoll_wait        479345      0 54254.933     0.000     0.113   137.811      2.36%
+   write             489110      0  6462.441     0.003     0.013   141.566      6.67%
+   read              479154      0  1093.764     0.001     0.002    77.054     10.96%
+   access             15290      0    64.121     0.003     0.004     0.116      0.34%
+   newfstatat            45      0     0.124     0.002     0.003     0.004      2.11%
+   openat                 5      0     0.056     0.010     0.011     0.012      3.92%
+   statfs                 5      0     0.055     0.005     0.011     0.033     49.03%
+   getdents64            10      0     0.034     0.001     0.003     0.007     19.01%
+   close                  5      0     0.010     0.002     0.002     0.002      2.48%
+
+
+ [ET_AIO 0:86] (3675372), 25922 events, 0.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   futex              12959   6479 65166.693     0.000     5.029    10.813      0.88%
+   pwrite64               1      0    14.841    14.841    14.841    14.841      0.00%
+   write                  1      0     0.003     0.003     0.003     0.003      0.00%
+
+
+ [ET_AIO 1:86] (3675373), 27392 events, 0.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   futex              13688   6688 65142.503     0.000     4.759    10.818      0.90%
+   pwrite64               4      0    40.046     4.259    10.012    14.766     27.65%
+   mprotect               1      0     0.034     0.034     0.034     0.034      0.00%
+   write                  3      0     0.007     0.002     0.002     0.003      4.55%
+
+
+ [ET_AIO 2:86] (3675374), 25930 events, 0.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   futex              12959   6474 65154.199     0.000     5.028    15.304      0.88%
+   pwrite64               3      0    41.064    11.256    13.688    14.966      8.89%
+   write                  3      0     0.008     0.002     0.003     0.003      5.82%
+
+
+ [ET_AIO 3:86] (3675375), 25919 events, 0.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   futex              12955   6475 65140.278     0.000     5.028    15.015      0.88%
+   pwrite64               3      0    34.163     4.257    11.388    15.068     31.31%
+   write                  2      0     0.005     0.002     0.002     0.002      2.10%
+
+
+ [ET_AIO 4:86] (3675376), 25908 events, 0.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   futex              12949   6471 65139.237     0.000     5.030    26.998      0.88%
+   pwrite64               3      0    33.906     4.305    11.302    14.873     30.96%
+   write                  2      0     0.005     0.002     0.002     0.002      1.67%
+
+
+ [ET_AIO 5:86] (3675377), 25922 events, 0.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   futex              12961   6480 65180.741     0.000     5.029    10.536      0.88%
+
+
+ [ET_AIO 6:86] (3675378), 25920 events, 0.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   futex              12953   6470 65133.397     0.000     5.028    10.785      0.88%
+   pwrite64               4      0    49.302     4.336    12.326    15.038     21.61%
+   write                  3      0     0.007     0.002     0.002     0.003      2.90%
+
+
+ [ET_AIO 7:86] (3675379), 27312 events, 0.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   futex              13648   6660 65136.315     0.000     4.773    13.562      0.90%
+   pwrite64               5      0    53.098     4.298    10.620    14.968     24.24%
+   write                  3      0     0.008     0.002     0.003     0.003      4.73%
+
+
+ [ACCEPT 0:8080] (3675380), 5132 events, 0.0%
+
+   syscall            calls  errors  total       min       avg       max       stddev
+                                     (msec)    (msec)    (msec)    (msec)        (%)
+   --------------- --------  ------ -------- --------- --------- ---------     ------
+   accept4              900      0    53.234     0.000     0.059    19.263     51.39%
+   write                758      0     2.734     0.001     0.004     0.127      7.53%
+   setsockopt           900      0     2.563     0.001     0.003     0.045      4.78%
+   mprotect               8      0     0.129     0.008     0.016     0.024     12.02%
+
+
